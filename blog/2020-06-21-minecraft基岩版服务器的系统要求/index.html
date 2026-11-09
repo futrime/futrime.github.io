@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minecraft基岩版服务器的系统要求 · Zijian Zhang</title>
+<meta name="description" content="Minecraft基岩版服务器的系统要求">
+<meta property="og:title" content="Minecraft基岩版服务器的系统要求 · Zijian Zhang">
+<meta property="og:description" content="Minecraft基岩版服务器的系统要求">
+<link rel="canonical" href="https://zjzh.me/blog/2020-06-21-minecraft基岩版服务器的系统要求/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.06.21 · 中文</div>
+      <h1>Minecraft基岩版服务器的系统要求</h1>
+      
+      <div class="tags"><span class="chip">Minecraft</span><span class="chip">基岩版</span><span class="chip">系统要求</span><span class="chip">硬件配置</span><span class="chip">BDS</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/1015d4901604.png" alt=""></figure>
+    <div class="prose zh">
+<h2 id="_1">硬件配置</h2>
+<p>官方要求的配置是：</p>
+<ul>
+<li>Intel或AMD的64位处理器</li>
+<li>大于等于2个核心</li>
+<li>大于等于1GB内存</li>
+</ul>
+<p>根据实际体验，就算是在J3455的单核心上都能够流畅运行，但是根据<a href="https://bugs.mojang.com/browse/BDS-2574" target="_blank" rel="noopener">Minecraft漏洞维护器BDS-2574</a>，Linux服务端有空跑CPU以及无法使用超过4个线程的可能，因此使用Linux服务器可能需要更强的配置（反正阿里云ECS跑不了）。</p>
+<p>内存方面，开生存地图大概占用100M，小游戏地图可能最多500M，因此Linux下512M内存也是足够的（Windows系统占用多，最好还是上1G）。</p>
+<h2 id="_2">系统要求</h2>
+<p>官方给的要求是：</p>
+<ul>
+<li>Windows 10 1703或更高 或</li>
+<li>Windows Server 2016 或</li>
+<li>Windows Server 2019 或</li>
+<li>Ubuntu 18</li>
+<li>如果使用Windows系统，需要安装<a href="https://www.microsoft.com/en-us/download/details.aspx?id=48145" target="_blank" rel="noopener">Visual C++ Redistributable Packages for Visual Studio 2015</a>，否则会提示缺少dll，而且如果需要同时运行客户端和服务端，必须要在Powershell中以管理员权限运行<code>CheckNetIsolation.exe LoopbackExempt –a –p=S-1-15-2-1958404141-86561845-1752920682-3514627264-368642714-62675701-733520436</code>解除Loopback限制（就算是虚拟机也要）。</li>
+</ul>
+<p>根据自己的实践经验，Windows Server 2012 R2或更低并不能正常运行，会出现包括但不限于以下提示：</p>
+<ul>
+<li>Chakra.dll缺失</li>
+<li>api-ms-win-core-memory-l1-1-5.dll缺失</li>
+<li>GetCurrentPackageFamilyName缺失</li>
+</ul>
+<p>至于Linux方面，虽然官方只给出了Ubuntu 18，但是Ubuntu 19或Ubuntu 20应该是可以使用的（没试过）。根据<a href="https://hub.docker.com/r/itzg/minecraft-bedrock-server/dockerfile" target="_blank" rel="noopener">itzg/minecraft-bedrock-server的Dockerfile</a>，Debian 10安装了jq后可以正常运行（没安装可能也可以）。根据实测，CentOS无法正常运行，会提示缺少libssl.so，即使安装了openssl也不行。个人推测只要是正常的基于Debian的Linux发行版都可以。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://www.reddit.com/user/ProfessorValko/comments/9f438p/bedrock_dedicated_server_tutorial/</li>
+<li>https://bugs.mojang.com/browse/BDS-2574</li>
+<li>https://www.microsoft.com/en-us/download/details.aspx?id=48145</li>
+<li>
+<p>https://hub.docker.com/r/itzg/minecraft-bedrock-server/dockerfile</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-06-25-3-5mm-耳机-麦克风-接口定义/"><span class="mono">← Newer</span>3.5mm 耳机 麦克风 接口定义</a><a class="next" href="/blog/2020-06-20-python多维列表的一些坑/"><span class="mono">Older →</span>Python多维列表的一些坑</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

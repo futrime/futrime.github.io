@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NanoPi NEO 上手评测（一）——装系统 · Zijian Zhang</title>
+<meta name="description" content="提到开发板，应该不少人会想到树莓派，但是由于树莓派并没有进驻中国大陆市场，因此购买树莓派只能够通过邮寄或者代理商渠道，这样导致树莓派的价格偏高，性价比较低。因此，在中国大陆，类似NanoPi这类开发板就成了树莓派的替代选择。">
+<meta property="og:title" content="NanoPi NEO 上手评测（一）——装系统 · Zijian Zhang">
+<meta property="og:description" content="提到开发板，应该不少人会想到树莓派，但是由于树莓派并没有进驻中国大陆市场，因此购买树莓派只能够通过邮寄或者代理商渠道，这样导致树莓派的价格偏高，性价比较低。因此，在中国大陆，类似NanoPi这类开发板就成了树莓派的替代选择。">
+<link rel="canonical" href="https://zjzh.me/blog/2019-07-25-nanopi-neo-上手评测-一-装系统/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--pink)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2019.07.25 · 中文</div>
+      <h1>NanoPi NEO 上手评测（一）——装系统</h1>
+      <p class="lede">提到开发板，应该不少人会想到树莓派，但是由于树莓派并没有进驻中国大陆市场，因此购买树莓派只能够通过邮寄或者代理商渠道，这样导致树莓派的价格偏高，性价比较低。因此，在中国大陆，类似NanoPi这类开发板就成了树莓派的替代选择。</p>
+      <div class="tags"><span class="chip">NanoPi NEO</span><span class="chip">树莓派</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/3bf4b3e7b371.jpg" alt=""></figure>
+    <div class="prose zh">
+<h1 id="_1">简介</h1>
+<p>NanoPi NEO是属于NanoPi产品线最平民的一块板，功能简单实用：RJ45、USB2.0、UART、GPIO以及SPI、I<sup>2</sup>C这类工业控制接口一应俱全，硬件规格比较低端，但是对于开发板来说足够用。</p>
+<p>NanoPi NEO使用的CPU是全志H3，这是全志官方给出的配置信息：</p>
+<p><img loading="lazy" alt="2.png" src="/blog/img/82fd4344cefd.png" /></p>
+<p>显然，这款芯片最大的亮点就是它的GPU和它的视频编解码能力了，那么是不是NanoPi NEO就可以拿来做电视盒子了呢？</p>
+<p>很遗憾，虽然NanoPi NEO用了这款芯片，但是板子并没有提供任何视频输入、输出接口，而且官方提供的操作系统FriendlyCore和OpenWRT都特地将X-Window移除了，虽然说是“提高性能”，但是摆明了就是不给用视频输出。</p>
+<p><img loading="lazy" alt="3.png" src="/blog/img/27135b96b93c.png" /></p>
+<p>其实这也就反映了NanoPi NEO的定位：一个嵌入式的全功能系统。毕竟全志H3用的是六年前的ARM Cortex-A7架构，它的性能再强也强不到哪里去，其实已经无法应付现在的图形处理需求了，这样的话不如直接不要图形输入、输出，还能剩一些空间。毕竟，塞的东西太多的唯一结果就是塞不下。这款板子最突出的特点就是“小”：官方指出它只有40 mm x 40 mm大，比大多数Arduino板还要小，能力却强大很多。</p>
+<h1 id="_2">上手</h1>
+<p>这次我从同学那里嫖来一台NanoPi NEO 512M版，版本不是官网维基上最新的那个了，接口位置有些不同，但是配置是一样的。</p>
+<p><img loading="lazy" alt="4.jpg" src="/blog/img/385de406f273.jpg" /></p>
+<p><img loading="lazy" alt="5.jpg" src="/blog/img/8ac07380724b.jpg" /></p>
+<p><img loading="lazy" alt="6.jpg" src="/blog/img/5ab19bd5c2d0.jpg" /></p>
+<p><img loading="lazy" alt="7.jpg" src="/blog/img/07a82bb9bd3b.jpg" /></p>
+<p>官网上面说SanDisk Ultra是经过认证的SD卡，刚好有一块，那就用上它吧。</p>
+<p><img loading="lazy" alt="8.png" src="/blog/img/904c37d64e08.png" /></p>
+<p><img loading="lazy" alt="9.jpg" src="/blog/img/1dc450ffbc06.jpg" /></p>
+<p>不过这次有点遗憾的就是我的USB转TTL模块丢了，就只能用网络SSH来调试，希望FriendlyCore默认网络配置正确。</p>
+<p>首先在官网下载固件FriendlyCore，注意要解压出里面的.img文件：</p>
+<p><img loading="lazy" alt="3.png" src="/blog/img/27135b96b93c.png" /></p>
+<p>然后还要下载Win32DiskImager来写入。据说Rufus和UltraISO也可以用，以后再试试。</p>
+<p>注意这里比较坑的一点就是官网没有写到要格式化SD卡，但是Win32DiskImager写入没有格式化的SD卡时可能会把空间识别小了，这样就会有一部分空间浪费掉，所以建议大家用 <em>SDFormatter</em> 进行格式化。</p>
+<p><img loading="lazy" alt="11.png" src="/blog/img/7d5fc6411092.png" /></p>
+<p>注意格式化前一定要选择逻辑分区大小调整，不然和没格式化没什么区别。其他选项就随便选。</p>
+<p><img loading="lazy" alt="12.png" src="/blog/img/a50323ca71d6.png" /></p>
+<p>格式化完之后就用 <em>Win32DiskImager</em> 写入，直接导入.img的固件包然后点Write就可以了，不放心可以先检查一下MD5.
+说到MD5，我就想起来之前有一次下载Ubuntu Server进行安装，结果不停地安装失败，提示下载的内容MD5不正确，折腾了好久才发现是安装包的MD5校验数据损坏了。</p>
+<p><img loading="lazy" alt="13.png" src="/blog/img/acb75b8543a0.png" /></p>
+<p>注意Win32DiskImager写入成功后Windows可能会有一堆弹窗，提示要格式化某某硬盘驱动器之类的，全部取消掉就可以了。这是因为Windows不能识别Win32DiskImager写入的ext4分区。</p>
+<p><img loading="lazy" alt="14.png" src="/blog/img/32210e42cb2f.png" /></p>
+<p>弹出存储卡，插入NanoPi NEO卡槽，接上网线，接通电源。等到板子上面的绿色灯亮，蓝色灯闪烁，网卡口灯闪烁，就说明系统启动成功了。随后可以SSH连接NanoPi NEO，默认用户有两个：</p>
+<blockquote>
+<p>用户名：pi 密码：pi</p>
+<p>用户名：root 密码：fa</p>
+</blockquote>
+<p>建议使用root登录，以后不容易出错，并且强烈建议用命令 <code>passwd</code> 修改默认密码。</p>
+<p>登陆进去后就可以用命令 <code>sudo npi-config</code> （root用户使用 <code>npi-config</code> ）进行初步配置，但是在此之前建议先执行命令</p>
+<div class="hl"><pre><span></span><code>sudo apt update
+</code></pre></div>
+
+<p>如果是root用户就是</p>
+<div class="hl"><pre><span></span><code>apt update
+</code></pre></div>
+
+<p>到这里为止，NanoPi NEO上手评测的第一步——装系统就结束了，至于如何折腾和评测，请继续关注我的博客。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2019-07-28-nanopi-neo上手评测-二-性能评估/"><span class="mono">← Newer</span>NanoPi NEO上手评测（二）——性能评估</a><span></span></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

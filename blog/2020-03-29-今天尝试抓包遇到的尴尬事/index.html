@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>今天尝试抓包遇到的尴尬事 · Zijian Zhang</title>
+<meta name="description" content="家用路由器不刷固件无法抓包。">
+<meta property="og:title" content="今天尝试抓包遇到的尴尬事 · Zijian Zhang">
+<meta property="og:description" content="家用路由器不刷固件无法抓包。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-03-29-今天尝试抓包遇到的尴尬事/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.03.29 · 中文</div>
+      <h1>今天尝试抓包遇到的尴尬事</h1>
+      <p class="lede">家用路由器不刷固件无法抓包。</p>
+      <div class="tags"><span class="chip">抓包</span><span class="chip">家用路由器</span><span class="chip">路由器</span><span class="chip">混杂模式</span><span class="chip">tcpdump</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/cd8ebf6d0fec.jpg" alt=""></figure>
+    <div class="prose zh">
+<p>今天心血来潮，想要试试抓取家里局域网内所有设备的网络包。于是我把我的NanoPi NEO接到了主路由器荣耀路由器Pro的LAN口上启动抓包。</p>
+<p>先安装<code>ifconfig</code>并开启开启网卡<code>eth0</code>的混杂模式：</p>
+<div class="hl"><pre><span></span><code>sudo apt install ifconfig -y
+sudo ifconfig eth0 promisc
+</code></pre></div>
+
+<p>然后安装并启动tcpdump抓包：</p>
+<div class="hl"><pre><span></span><code>sudo apt install tcpdump -y
+sudo tcpdump
+</code></pre></div>
+
+<p>界面上出现了大量抓包信息，但是似乎大部分都是来源或目的是NanoPi NEO自己的。设置tcpdump过滤掉自己<code>192.168.1.11</code>的包：</p>
+<div class="hl"><pre><span></span><code>sudo tcpdump host not 192.168.1.11
+</code></pre></div>
+
+<p>显示如下：</p>
+<div class="hl"><pre><span></span><code>tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+12:50:49.882206 ARP, Request who-has 192.168.1.204 tell 192.168.1.1, length 46
+12:50:50.712190 STP 802.1d, Config, Flags [none], bridge-id 8000.a8:0c:63:a2:51:19.8001, length 43
+12:50:50.882197 ARP, Request who-has 192.168.1.204 tell 192.168.1.1, length 46
+12:50:51.882240 ARP, Request who-has 192.168.1.204 tell 192.168.1.1, length 46
+12:50:52.712198 STP 802.1d, Config, Flags [none], bridge-id 8000.a8:0c:63:a2:51:19.8001, length 43
+12:50:54.391158 IP 192.168.1.1.6555 &gt; 192.168.1.255.sge-execd: UDP, length 72
+12:50:54.712313 STP 802.1d, Config, Flags [none], bridge-id 8000.a8:0c:63:a2:51:19.8001, length 43
+12:50:56.712273 STP 802.1d, Config, Flags [none], bridge-id 8000.a8:0c:63:a2:51:19.8001, length 43
+12:50:58.712298 STP 802.1d, Config, Flags [none], bridge-id 8000.a8:0c:63:a2:51:19.8001, length 43
+</code></pre></div>
+
+<p>似乎只有ARP包和广播包啊，试下去除ARP和广播包：</p>
+<div class="hl"><pre><span></span><code>sudo tcpdump not arp and host not 192.168.1.11 and host not 192.168.1.255 and not stp and not ip6
+</code></pre></div>
+
+<p>显示如下：</p>
+<div class="hl"><pre><span></span><code>tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+</code></pre></div>
+
+<p>没有抓到任何包。</p>
+<p>等了一个小时，也没有抓到任何包。。。</p>
+<p>于是我去查看网卡信息，确认混杂模式已经正常开启了。各项设置都是正常的。</p>
+<p>头疼了。于是我就去搜索相关信息，直到某位大神言简意赅：家用路由器不刷系统是不能抓包的。</p>
+<p>没错，家用路由器局域网内的设备是无法成功抓包的。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-04-05-谈谈两个月前两台电脑坏掉给我的教训/"><span class="mono">← Newer</span>谈谈两个月前两台电脑坏掉给我的教训</a><a class="next" href="/blog/2020-03-22-利用ai分离人声和乐器/"><span class="mono">Older →</span>利用AI分离人声和乐器</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set Interface Category in Windows · Zijian Zhang</title>
+<meta name="description" content="If a proxy is required by programs in Hyper-V virtual machines...">
+<meta property="og:title" content="Set Interface Category in Windows · Zijian Zhang">
+<meta property="og:description" content="If a proxy is required by programs in Hyper-V virtual machines...">
+<link rel="canonical" href="https://zjzh.me/blog/2023-09-10-set-interface-category-in-windows/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2023.09.10 · English</div>
+      <h1>Set Interface Category in Windows</h1>
+      <p class="lede">If a proxy is required by programs in Hyper-V virtual machines...</p>
+      <div class="tags"><span class="chip">Network</span><span class="chip">Virtual Machine</span><span class="chip">Proxy</span></div>
+    </header>
+    
+    <div class="prose">
+<p>Sometimes, some programs in a Hyper-V virtual machine need to access some network resources outside firewalls. Therefore, a proxy is required. However, by no means should we set the proxy in the virtual machine, taking into consideration the fact that setting up proxy in the virtual machine is a waste of time and resources. Instead, we can set the proxy in the host machine, and then share the proxy to the virtual machine.</p>
+<ol>
+<li>
+<p>Before we start, we need to make sure that the proxy program is available for private network. </p>
+</li>
+<li>
+<p>Get network interfaces with <code>Get-NetConnectionProfile</code>.</p>
+<p><code>powershell
+ Get-NetConnectionProfile</code></p>
+</li>
+<li>
+<p>Set the interface category to private with <code>Set-NetConnectionProfile</code>.</p>
+<p><code>powershell
+ Set-NetConnectionProfile -InterfaceIndex &lt;InterfaceIndex&gt; -NetworkCategory Private</code></p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2023-10-01-run-linux-gui-apps-through-ssh/"><span class="mono">← Newer</span>Run Linux GUI Apps through SSH</a><a class="next" href="/blog/2023-09-10-my-collection/"><span class="mono">Older →</span>My Collection</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>从零开始的爬虫教程（1）——从urllib开始 · Zijian Zhang</title>
+<meta name="description" content="随着网络的迅速发展，万维网成为大量信息的载体，如何有效地提取并利用这些信息成为一个巨大的挑战。在这样的背景下，网络爬虫(Internet Bot)应运而生。在本课程中我将会较为系统地介绍简单Python爬虫的制作。我们从爬取著名硬件测评网站TechPowerUp的GPU数据库开始。">
+<meta property="og:title" content="从零开始的爬虫教程（1）——从urllib开始 · Zijian Zhang">
+<meta property="og:description" content="随着网络的迅速发展，万维网成为大量信息的载体，如何有效地提取并利用这些信息成为一个巨大的挑战。在这样的背景下，网络爬虫(Internet Bot)应运而生。在本课程中我将会较为系统地介绍简单Python爬虫的制作。我们从爬取著名硬件测评网站TechPowerUp的GPU数据库开始。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-01-24-从零开始的爬虫教程-1-从urllib开始/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--lilac)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.01.24 · 中文</div>
+      <h1>从零开始的爬虫教程（1）——从urllib开始</h1>
+      <p class="lede">随着网络的迅速发展，万维网成为大量信息的载体，如何有效地提取并利用这些信息成为一个巨大的挑战。在这样的背景下，网络爬虫(Internet Bot)应运而生。在本课程中我将会较为系统地介绍简单Python爬虫的制作。我们从爬取著名硬件测评网站TechPowerUp的GPU数据库开始。</p>
+      <div class="tags"><span class="chip">Python</span><span class="chip">爬虫</span><span class="chip">网络</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/1b96f4d69658.gif" alt=""></figure>
+    <div class="prose zh">
+<p>随着网络的迅速发展，万维网成为大量信息的载体，如何有效地提取并利用这些信息成为一个巨大的挑战。在这样的背景下，网络爬虫(Internet Bot)应运而生。在本课程中我将会较为系统地介绍简单Python爬虫的制作。我们从爬取著名硬件测评网站<a href="https://www.techpowerup.com" target="_blank" rel="noopener">TechPowerUp</a>的GPU数据库开始。</p>
+<p>urllib是Python自带的网络标准库，地位相当于curl在Linux界。Request等其他网络请求库都是基于urllib的。如果想要系统地了解urllib，可以参考<a href="https://docs.python.org/3/library/urllib.html" target="_blank" rel="noopener">官方文档</a>。</p>
+<p>首先引入urllib.request库
+    import urllib.request
+注意这里引入的是urllib.request，在某些版本的urllib中被表示为urllib2，但是在最新的Python版本（3.8.1）中已经将urllib2重命名为urllib.request。另外，在某些Python版本中可以直接引入urllib但是其他一些版本不可以，因此兼容性考虑还是引入urllib.request。</p>
+<p>我们只需要一条简短的语句就可以爬取TechPowerUp的首页。
+    html = urllib.request.urlopen('https://www.techpowerup.com').read()
+这将会返回一个bytes类型字符串，我们不妨将其转为str类型：
+    html = html.decode()
+然后我们就可以得到TechPowerUp首页内容了。</p>
+<p>我们可以将其写到文件里：
+    f = open('test.txt', 'w')
+    f.write(html)
+    f.close()
+或者进行某些处理。</p>
+<p>我提前收集了一个<a href="https://futrime.gitee.io/image-cdn/2020/01/2394686189.txt" target="_blank" rel="noopener">TechPowerUp的GPU数据库2012-2020年所有NVIDIA显卡的详情页链接列表</a>。
+我们采用<a href="https://futrime.gitee.io/image-cdn/2020/01/1814181521.zip" target="_blank" rel="noopener">此代码</a>进行爬取并将所有网页存放在<code>./pages</code>目录中，效果如下所示：</p>
+<blockquote>
+<p>[root@localhost ~]# python3 1.py Connecting to
+http://www.techpowerup.com/gpu-specs/geforce-605-oem.c359</p>
+<p>Connecting to http://www.techpowerup.com/gpu-specs/nvidia-gf119.g93</p>
+<p>Connecting to http://www.techpowerup.com/gpu-specs/geforce-615.c2145</p>
+</blockquote>
+<p>随后我们就可以在<code>./pages</code>文件夹里面看到爬取的网页了。</p>
+<p>利用urllib制作爬虫的最最最基本的方法就是这样了，在下一篇博文中，我将会具体探讨某些优化方法和一些问题的解决方法。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://docs.python.org/3/library/urllib.html</li>
+<li>
+<p>https://www.techpowerup.com</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-01-25-从零开始的爬虫教程-2-加速-加速-加速/"><span class="mono">← Newer</span>从零开始的爬虫教程（2）——加速！加速！加速！</a><a class="next" href="/blog/2019-09-22-装逼神器-词云-word-cloud/"><span class="mono">Older →</span>装逼神器——词云(Word Cloud)</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

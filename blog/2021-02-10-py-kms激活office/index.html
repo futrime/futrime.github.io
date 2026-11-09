@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>py-kms激活Office · Zijian Zhang</title>
+<meta name="description" content="py-kms不仅可以用于激活Windows，还可以激活Office">
+<meta property="og:title" content="py-kms激活Office · Zijian Zhang">
+<meta property="og:description" content="py-kms不仅可以用于激活Windows，还可以激活Office">
+<link rel="canonical" href="https://zjzh.me/blog/2021-02-10-py-kms激活office/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--pink)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2021.02.10 · 中文</div>
+      <h1>py-kms激活Office</h1>
+      <p class="lede">py-kms不仅可以用于激活Windows，还可以激活Office</p>
+      <div class="tags"><span class="chip">KMS</span><span class="chip">Office</span><span class="chip">激活</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/08b63522d1ad.jpg" alt=""></figure>
+    <div class="prose zh">
+<p>在我的 <a href="https://blog.futrime.com/zh-cn/p/%E8%87%AA%E5%BB%BAkms%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%BF%80%E6%B4%BBwindows/" target="_blank" rel="noopener">上一篇博客</a> 中，我提到可以自己搭建KMS服务器激活Windows。实际上，不仅Windows，Microsoft Office系列软件也是支持KMS的，因此，我们也可以使用py-kms实现激活Office.</p>
+<p>首先要确认自己安装的Office是否是VL版本。在 <a href="https://otp.landian.vip/" target="_blank" rel="noopener">Office Tools Plus</a> 部署安装时，可以选择安装带有“批量版（VL）”的版本。</p>
+<p>依然是前往 <a href="https://py-kms.readthedocs.io/en/latest/Keys.html#office" target="_blank" rel="noopener">官方文档</a> 查找需要的许可证密钥。</p>
+<p>随后的步骤会比较麻烦，首先打开Windows Powershell（管理员），然后使用cd命令定位到Office文件夹中的OfficeXX文件夹中（其中XX=14代表Office 2010，XX=15代表Office 2013，XX=16代表Office 2016或2019），以我的为例：</p>
+<div class="hl"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span><span class="s1">'C:\Program Files\Microsoft Office\Office16\'</span>
+</code></pre></div>
+
+<p>由于需要管理员权限，不能在文件资源管理器中使用Shift+右键来打开Powershell，但是可以先找到这个位置，复制进入Powershell。记得加上前后引号。</p>
+<p>先查询下激活状态，如果激活了就不用折腾了：</p>
+<div class="hl"><pre><span></span><code>cscript<span class="w"> </span>ospp.vbs<span class="w"> </span>/dstatus
+</code></pre></div>
+
+<p>重点看LICENSE STATUS栏，如果是 <code>---OOB_GRACE---</code> 就是没有激活；如果是 <code>---LICENSED---</code> 就意味着已经激活了。</p>
+<p>使用以下命令修改KMS服务器，不要漏了cscript：</p>
+<div class="hl"><pre><span></span><code>cscript<span class="w"> </span>ospp.vbs<span class="w"> </span>/sethst:&lt;不带端口的服务器地址&gt;
+
+cscript<span class="w"> </span>ospp.vbs<span class="w"> </span>/setprt:&lt;端口号&gt;
+</code></pre></div>
+
+<p>可以再使用 <code>/dstatus</code> 查询一下激活状态以及KMS服务器设置是否成功。</p>
+<p>然后安装密钥：</p>
+<div class="hl"><pre><span></span><code>cscript<span class="w"> </span>ospp.vbs<span class="w"> </span>/inpkey:&lt;密钥&gt;
+</code></pre></div>
+
+<p>有个有趣的地方，在Office Tools Plus部署的Office 2019标准版批量版的默认密钥就是py-kms文档给的那个，不需要修改。</p>
+<p>最后激活</p>
+<div class="hl"><pre><span></span><code>cscript ospp.vbs /act
+</code></pre></div>
+
+<p>再使用 <code>/dstatus</code> 看下激活状态。</p>
+<p>根据py-kms文档，一次激活只能维持180天，如果需要持续激活，必须保持KMS服务器不掉线。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://github.com/SystemRage/py-kms</li>
+<li>https://py-kms.readthedocs.io</li>
+<li>https://otp.landian.vip/</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2021-02-11-使用gost自由组建网络/"><span class="mono">← Newer</span>使用GOST自由组建网络</a><a class="next" href="/blog/2021-01-31-自建kms服务器激活windows/"><span class="mono">Older →</span>自建KMS服务器激活Windows</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

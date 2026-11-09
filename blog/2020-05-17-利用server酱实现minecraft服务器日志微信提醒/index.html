@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>利用Server酱实现Minecraft服务器日志微信提醒 · Zijian Zhang</title>
+<meta name="description" content="在Minecraft服务器日常使用中，我们常常想要知道服务器上发生了什么，有谁进来了，有谁退出去了，或者是服务器自己是不是出了错误。在这篇博客中我将会简要介绍如何利用Server酱实现Minecraft服务器日志微信提醒。">
+<meta property="og:title" content="利用Server酱实现Minecraft服务器日志微信提醒 · Zijian Zhang">
+<meta property="og:description" content="在Minecraft服务器日常使用中，我们常常想要知道服务器上发生了什么，有谁进来了，有谁退出去了，或者是服务器自己是不是出了错误。在这篇博客中我将会简要介绍如何利用Server酱实现Minecraft服务器日志微信提醒。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-05-17-利用server酱实现minecraft服务器日志微信提醒/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.05.17 · 中文</div>
+      <h1>利用Server酱实现Minecraft服务器日志微信提醒</h1>
+      <p class="lede">在Minecraft服务器日常使用中，我们常常想要知道服务器上发生了什么，有谁进来了，有谁退出去了，或者是服务器自己是不是出了错误。在这篇博客中我将会简要介绍如何利用Server酱实现Minecraft服务器日志微信提醒。</p>
+      <div class="tags"><span class="chip">Minecraft</span><span class="chip">服务器</span><span class="chip">Server酱</span><span class="chip">日志</span><span class="chip">微信</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/268b9bdc61fd.jpg" alt=""></figure>
+    <div class="prose zh">
+<h2 id="api">API申请</h2>
+<p>首先我们需要前往Server酱官网注册账号以获得自己的SCKEY：</p>
+<p><img loading="lazy" alt="Screenshot_2020-04-22 首页 Server酱.png" src="/blog/img/f31e373e1d33.png" /></p>
+<p>可以直接使用Github登录，十分方便。登陆后选择<code>微信推送</code>，点击绑定。用自己的微信扫描二维码，关注公众号<code>方糖</code>，然后在扫描一次即可绑定，注意要回到网页点击<code>检查结果并确认绑定</code>。</p>
+<p>然后切换到<code>发送消息</code>栏，复制自己的SCKEY。</p>
+<h2 id="docker">Docker服务器配置</h2>
+<p>对于使用Docker搭建服务器的用户来说，配置十分方便且不需要暂停服务器。</p>
+<p>首先我们使用<code>docker ps</code>指令查找到Minecraft服务端容器名称,如图为<code>mcserver</code>：</p>
+<p><img loading="lazy" alt="Screenshot_2020-04-22 首页 Server酱.png" src="/blog/img/93690ea5b608.png" /></p>
+<p>然后新建一个Python脚本（没有Python环境？参考：<a href="https://blog.futrime.com/hacking/131.html" target="_blank" rel="noopener">Linux下搭建Python环境</a>），输入以下内容并将对应内容改为自己的信息（去掉&lt;&gt;）：</p>
+<div class="hl"><pre><span></span><code>import threading
+import time
+import urllib.request
+import urllib.parse
+import os
+
+last_msg = ""
+def time_handler():
+    msg = os.popen("docker logs --tail 1 &lt;服务端容器名称&gt;")
+    msg = msg.read()
+    print(msg[:-1])
+    global last_msg
+    if msg[-26:] != "Running AutoCompaction...\n" and msg != last_msg:
+        urllib.request.urlopen("https://sc.ftqq.com/&lt;你的SCKEY&gt;.send?text=" + urllib.parse.quote(msg[27:-25])) # 其中 msg[27:-25] 是特别为玩家上线/下线提醒设置的，如果希望看到完整信息，请改为 msg
+    else:
+        print("Nothing to do")
+    last_msg = msg
+    global timer
+    timer = threading.Timer(5, time_handler)
+    timer.start()
+
+time_handler()
+</code></pre></div>
+
+<p>然后在终端中输入<code>nohup python3 &lt;你的脚本名称&gt;</code>并运行即可。</p>
+<h2 id="_1">全局服务器配置</h2>
+<p>如果你使用nohup运行服务器，那么直接使用以下代码即可：</p>
+<div class="hl"><pre><span></span><code>import threading
+import time
+import urllib.request
+import urllib.parse
+import os
+
+last_msg = ""
+def time_handler():
+    msg = os.popen("tail -n 1 nohup.out") # 如果你自定义了nohup输出地址，请修改
+    msg = msg.read()
+    print(msg[:-1])
+    global last_msg
+    if msg[-26:] != "Running AutoCompaction...\n" and msg != last_msg:
+        urllib.request.urlopen("https://sc.ftqq.com/&lt;你的SCKEY&gt;.send?text=" + urllib.parse.quote(msg[27:-25])) # 其中 msg[27:-25] 是特别为玩家上线/下线提醒设置的，如果希望看到完整信息，请改为 msg
+    else:
+        print("Nothing to do")
+    last_msg = msg
+    global timer
+    timer = threading.Timer(5, time_handler)
+    timer.start()
+
+time_handler()
+</code></pre></div>
+
+<p>如果你使用screen运行服务端，那么你需要先结束原来的服务端并用<code>exit</code>命令退出screen环境。然后运行<code>screen -L -dmS mc</code>建立自动日志screen环境。然后通过<code>screen -r mc</code>进入screen环境中手动启动服务器。</p>
+<p>然后按<code>Ctrl+A,D</code>离开screen环境，用<code>ls</code>命令可以看到当前目录中出现了<code>screenlog.0</code>文件（也可能是<code>screenlog.1</code>如此类推）,新建Python脚本（没有Python环境？参考：<a href="https://blog.futrime.com/hacking/131.html" target="_blank" rel="noopener">Linux下搭建Python环境</a>），输入：</p>
+<div class="hl"><pre><span></span><code>import threading
+import time
+import urllib.request
+import urllib.parse
+
+last_msg = ""
+def time_handler():
+    msg = open("screenlog.0") # 或者screenlog.1以此类推
+    msg = msg.readlines()[-1]
+    print(msg[:-1])
+    global last_msg
+    if msg[-26:] != "Running AutoCompaction...\n" and msg != last_msg:
+        urllib.request.urlopen("https://sc.ftqq.com/&lt;你的SCKEY&gt;.send?text=" + urllib.parse.quote("[Sunny s World] " + msg[27:-25]))
+    else:
+        print("Nothing to do.")
+    last_msg = msg
+    global timer
+    timer = threading.Timer(1, time_handler)
+    timer.start()
+
+time_handler()
+</code></pre></div>
+
+<p>然后在终端中输入<code>nohup python3 &lt;你的脚本名称&gt;</code>即可。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://sc.ftqq.com/</li>
+<li>https://blog.futrime.com/hacking/302.html</li>
+<li>https://blog.futrime.com/hacking/131.html</li>
+<li>
+<p>https://docs.docker.com/</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-05-23-打算构建英文博客/"><span class="mono">← Newer</span>打算构建英文博客</a><a class="next" href="/blog/2020-05-16-利用cloudflare进行网页跳转/"><span class="mono">Older →</span>利用Cloudflare进行网页跳转</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python Web Server from Scratch · Zijian Zhang</title>
+<meta name="description" content="Sometimes we&#x27;d like to copy some file from our computer to our mobile phone and other devices at home. However, common chat applications have set a limit of max upload size or has limited the upload and download speed. Then Python has a place.">
+<meta property="og:title" content="Python Web Server from Scratch · Zijian Zhang">
+<meta property="og:description" content="Sometimes we&#x27;d like to copy some file from our computer to our mobile phone and other devices at home. However, common chat applications have set a limit of max upload size or has limited the upload and download speed. Then Python has a place.">
+<link rel="canonical" href="https://zjzh.me/blog/2020-10-09-python-web-server-from-scratch/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.10.09 · English</div>
+      <h1>Python Web Server from Scratch</h1>
+      <p class="lede">Sometimes we&#x27;d like to copy some file from our computer to our mobile phone and other devices at home. However, common chat applications have set a limit of max upload size or has limited the upload and download speed. Then Python has a place.</p>
+      <div class="tags"><span class="chip">Python</span><span class="chip">Web</span><span class="chip">Server</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/4763b7dbcbbd.jpg" alt=""></figure>
+    <div class="prose">
+<p>First we need to install Python 3.x, if using Linux please refer to [Build Python Environment in Linux][2]. If using Windows, you can download from official straightly: https://www.python.org/downloads/windows/, The .zip file is portable version, other versions need installation.</p>
+<p><img loading="lazy" alt="Python Distributions" src="/blog/img/beba01d7e759.png" /></p>
+<p>（Windows Users）Go to the folder to share, right click with <code>SHIFT</code>, choose <code>Open Powershell in this folder</code> or <code>Open command line in this folder</code>.</p>
+<p>Type command <code>python3 -m http.server</code> （<code>python3</code> might be replaced by <code>python</code> or <code>py</code>）, it uses port 8000 for default.</p>
+<p><img loading="lazy" alt="Demo" src="/blog/img/063deff57fd8.png" /></p>
+<p>In order to use a specific port, type <code>python3 -m http.server &lt;PORT&gt;</code>. To designate the folder, type <code>python3 -m http.server -d &lt;FOLDER NAME&gt;</code>.</p>
+<p>There is some more things to do with Portable version, you have to type the full path of Python executable program instead of the abbreviations like <code>python</code>.</p>
+<p>To make a .py script, create a new file and type content below,</p>
+<div class="hl"><pre><span></span><code>import http.server
+import socketserver
+
+PORT = 8000 # Port
+
+Handler = http.server.SimpleHTTPRequestHandler
+
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    print("serving at port", PORT)
+    httpd.serve_forever()
+</code></pre></div>
+
+<p>References：</p>
+<ol>
+<li>https://docs.python.org/3.7/library/http.server.html</li>
+<li>https://www.python.org/downloads/windows/</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-10-10-whats-conways-game-of-life/"><span class="mono">← Newer</span>What&#x27;s Conway&#x27;s Game of Life</a><a class="next" href="/blog/2020-10-09-open-browser-in-python/"><span class="mono">Older →</span>Open Browser in Python</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReadTheDocs快速上手 · Zijian Zhang</title>
+<meta name="description" content="难道ReadTheDocs就只能用来写项目文档么？当然不是咯！">
+<meta property="og:title" content="ReadTheDocs快速上手 · Zijian Zhang">
+<meta property="og:description" content="难道ReadTheDocs就只能用来写项目文档么？当然不是咯！">
+<link rel="canonical" href="https://zjzh.me/blog/2021-01-31-readthedocs快速上手/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--gold)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2021.01.31 · 中文</div>
+      <h1>ReadTheDocs快速上手</h1>
+      <p class="lede">难道ReadTheDocs就只能用来写项目文档么？当然不是咯！</p>
+      <div class="tags"><span class="chip">ReadTheDocs</span><span class="chip">文档</span><span class="chip">创作</span><span class="chip">GitBook</span><span class="chip">Sphinx</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/4524679fc6d6.png" alt=""></figure>
+    <div class="prose zh">
+<p>不想听我BB，请直接<a href="#正文">跳转到正文</a></p>
+<h2 id="_1">背景</h2>
+<p>去年暑假，在B站刷了《关于我转生变成史莱姆这档事》和《因为太怕痛就全点防御力了》这两部番，有点中毒。因为学校8月2日就开学了，当时毒性未退，便在网上找了这两部番的小说原著电子书，带回去慢慢看。结果因此中毒反而更深了。</p>
+<p>后来就想着，既然中毒已深，那就破罐子破摔吧，索性让自己中毒中得更加深一点，便打算自己写这两个作品的同人文章。</p>
+<p>可是，问题在于，到底在什么平台写文章比较好呢？</p>
+<p>一开始打算直接在哔哩哔哩作者后台、刺猬猫作者后台这一类投稿平台的文本编辑器上面直接书写，但是却想到，在这些平台书写，每次想要写，都必须进行麻烦的登录、前往后台、前往草稿箱等一系列操作，等到操作完，写作的意头就已经丧失殆尽了。</p>
+<p>某天偶尔看到有个有趣的网站，叫做<a href="https://www.gitbook.com/" target="_blank" rel="noopener">GitBook</a>，试用了一下，发现挺好用的。而且可以绑定自定义域名，构建一个专门的同人文阅读站点。不过遗憾的是由于其使用了Fastly的CDN，在国内访问质量极其差，必须手动使用Cloudflare的CDN，这导致了访问速度缓慢。当时觉得这个网站实在太赞了，很难想到还有什么更加优秀的解决方案。</p>
+<p>问题出在写到大概第十话的时候。由于前文越来越多，掌握情节走向变得有点困难。我便打算将所有文字下载下来，制作成EPUB或者PDF，放在自己的小米多看阅读器，时常翻阅。这时我发现，GitBook个人免费版是不支持导出PDF的，而EPUB的导出，连按钮都没有。官方说认证成为社区开发者，就可以导出，但是这个又不是某个开源软件的文档，必然不可能申请通过。</p>
+<p>所幸GitBook出身于一个叫做gitbook-cli的命令行工具，在适当的情况下，应该是可以通过这个工具导出的。理论上，实践是简单的；实际上，坑却到处都是：gitbook-cli工具已经有很长时间没有维护了——GitBook的开发者们，可能在盈利或其他的目的指导下，已经将GitBook转化为了一个在线服务提供商，而不是开源软件的开发组了。因此在使用gitbook-cli工具时，即便是安装，也会屡屡报错。最后发现是因为NodeJS版本太新了，必须要降级到NodeJS v10.x.x才能正常使用，这就和其他软件不兼容了。虽然有NVM这一类工具，但是又得花很多时间折腾。另外一点，gitbook-cli导出PDF、EPUB等并不是原生支持的，而是要使用Calibre的库，而在Linux下安装Calibre，又没得指定加速代理，下载速度龟速——甚至睡了一觉都还没装好。总之种种原因，实在将我劝退了。</p>
+<p>直到去年12月，仔细研读了ReadTheDocs的文档之后，才发现，原来最好的工具——强大、易用、开源的工具——始终在我身边。</p>
+<h2 id="_2">站点设置</h2>
+<p>终于来到正文部分了。首先要注册一个账户。</p>
+<p>打开<a href="https://readthedocs.org/accounts/social/connections/" target="_blank" rel="noopener">已连接的服务</a>，在GitHub、GitLab、Bitbucket中至少选择一个连接。在对应的连接账户中，必须要创建用于放置文档的仓库。</p>
+<p>打开<a href="https://readthedocs.org/dashboard/import/" target="_blank" rel="noopener">导入代码库</a>，导入刚才建立的仓库。按照指示即可建立。</p>
+<p>项目创建完成后，可以在 管理 栏增加自定义的 域 。ReadTheDocs的速度比较快，不需要再加上Cloudflare加速了。</p>
+<p>在 高级设置 栏里面可以设置构建方式。勾选 <code>Build pull requests for this project</code> 可以实现实时构建。</p>
+<p>“Python配置文件”栏可以设置Sphinx配置文件conf.py所在的地方，默认情况下是项目根目录下的conf.py文件。通过这个，可以实现仅构建某个文件夹的内容。</p>
+<p>在下面的“文档类型”中可以选择使用Sphinx或者是Mkdocs构建。如果只是使用网页版，两种都可以，Mkdocs初步配置简单一点；但是如果想要构建Epub、PDF等离线文档，就必须使用Sphinx。踩了Mkdocs的坑，在此个人建议使用Sphinx，本文只介绍使用Sphinx构建。</p>
+<h2 id="_3">初始化操作</h2>
+<p>首先在“高级设置”栏中修改文档类型为“Sphinx Html”，并且在“所需求的文件”填入 <code>requirements.txt</code> 。</p>
+<p>进行在线构建，必须要在本地进行预先配置。使用pip安装Sphinx并初始化sphinx环境（recommonmark是为了支持Markdown）：</p>
+<div class="hl"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>sphinx<span class="w"> </span>recommonmark
+
+sphinx-quickstart
+</code></pre></div>
+
+<p>修改生成的conf.py，添加如下语句：</p>
+<div class="hl"><pre><span></span><code><span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'recommonmark'</span><span class="p">,</span> <span class="s1">'sphinx_rtd_theme'</span><span class="p">]</span>
+</code></pre></div>
+
+<p>同时可以修改project、author、copyright等内容，使用中文的话还要修改language。为了使用主题（比如ReadTheDocs的典型风格主题），还要修改html_theme.以我的为例：</p>
+<div class="hl"><pre><span></span><code><span class="n">project</span> <span class="o">=</span> <span class="s1">'我的文档'</span>
+<span class="n">copyright</span> <span class="o">=</span> <span class="s1">'2021, Futrime'</span>
+<span class="n">author</span> <span class="o">=</span> <span class="s1">'Futrime'</span>
+
+<span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'recommonmark'</span><span class="p">,</span>
+    <span class="s1">'sphinx_rtd_theme'</span>
+<span class="p">]</span>
+
+<span class="n">language</span> <span class="o">=</span> <span class="s1">'zh_CN'</span>
+
+<span class="n">html_theme</span> <span class="o">=</span> <span class="s1">'sphinx_rtd_theme'</span>
+</code></pre></div>
+
+<p>创建requirements.txt，填写：</p>
+<div class="hl"><pre><span></span><code>recommonmark
+sphinx-rtd-theme
+</code></pre></div>
+
+<p>然后提交修改即可，如果配置了自动构建，此时应当已经开始构建了。</p>
+<h2 id="_4">建立目录索引</h2>
+<p>文档的构建，需要index.rst目录索引，否则ReadTheDocs并不知道哪些文档应当被构建。</p>
+<p>先上个例子：</p>
+<div class="hl"><pre><span></span><code><span class="n">..</span><span class="w"> </span><span class="n">toctree</span><span class="o">::</span>
+<span class="w">   </span><span class="o">:</span><span class="n">maxdepth</span><span class="o">:</span><span class="w"> </span><span class="m">2</span>
+
+<span class="w">   </span><span class="n">docs</span><span class="o">/</span><span class="n">README.md</span>
+
+<span class="n">..</span><span class="w"> </span><span class="n">toctree</span><span class="o">::</span>
+<span class="w">   </span><span class="o">:</span><span class="n">glob</span><span class="o">:</span>
+<span class="w">   </span><span class="o">:</span><span class="n">maxdepth</span><span class="o">:</span><span class="w"> </span><span class="m">2</span>
+<span class="w">   </span><span class="o">:</span><span class="n">caption</span><span class="o">:</span><span class="w"> </span>异闻录
+
+<span class="w">   </span><span class="n">docs</span><span class="o">/</span><span class="n">anecdote</span><span class="o">/*</span>
+</code></pre></div>
+
+<p>一开始建立的toctree只有一个，但是我们可以复制多几个，这样就可以实现多个文件夹了。glob标签代表的是正则匹配，例子中第二个toctree因为有通配符，必须要使用这个标签。caption是文件夹名称，缺失的话，该分区直接显示文档，不会有名称。</p>
+<p>以我的为例，我们以后需要增加文件，只需要在 <em>docs/anecdote/</em> 里面创建就可以了，默认按照 <strong>文件名的字母表序</strong> 排列。标题将会读取文档内的第一个#号的内容。</p>
+<h2 id="_5">写文档</h2>
+<p>以我的为例，在 <em>docs/anecdote/</em> 里面创建Markdown文档即可。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://readthedocs.org</li>
+<li>https://docs.readthedocs.io</li>
+<li>https://www.sphinx-doc.org/</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2021-01-31-自建kms服务器激活windows/"><span class="mono">← Newer</span>自建KMS服务器激活Windows</a><a class="next" href="/blog/2020-11-03-compress-images-with-tinypng/"><span class="mono">Older →</span>Accelerate Your Website by Minimizing Embedded Images</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>利用Cloudflare Worker加速下载GitHub Releases · Zijian Zhang</title>
+<meta name="description" content="GitHub Releases在国内访问很慢，Gitee的镜像也没有涵盖GitHub Releases，但是可以依靠Cloudflare Worker加速到10Mbps.">
+<meta property="og:title" content="利用Cloudflare Worker加速下载GitHub Releases · Zijian Zhang">
+<meta property="og:description" content="GitHub Releases在国内访问很慢，Gitee的镜像也没有涵盖GitHub Releases，但是可以依靠Cloudflare Worker加速到10Mbps.">
+<link rel="canonical" href="https://zjzh.me/blog/2020-11-02-利用cloudflare-worker加速下载github-releases/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--teal)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.11.02 · 中文</div>
+      <h1>利用Cloudflare Worker加速下载GitHub Releases</h1>
+      <p class="lede">GitHub Releases在国内访问很慢，Gitee的镜像也没有涵盖GitHub Releases，但是可以依靠Cloudflare Worker加速到10Mbps.</p>
+      <div class="tags"><span class="chip">Cloudflare</span><span class="chip">下载</span><span class="chip">GitHub</span><span class="chip">Cloudflare Worker</span><span class="chip">加速</span><span class="chip">GitHub Releases</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/68f768c7ecda.png" alt=""></figure>
+    <div class="prose zh">
+<p>今年4月份我写了篇文章<a href="../利用cloudflare-workers加速下载海外服务器的文件/">利用Cloudflare Workers加速下载海外服务器的文件</a> ，讲了下加速下载海外服务器文件的方法。但是最近在GitHub下载东西的时候发现GitHub Releases并不能获取到直链，而是会出现跳转，这样一来，原来的方法就失效了。</p>
+<p>但是对于跳转也并非没有解决方案，其实本质就是把跳转的Header中的<code>location</code>改为经过代理的地址，代码如下：</p>
+<div class="hl"><pre><span></span><code><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'fetch'</span><span class="p">,</span><span class="w"> </span><span class="nx">event</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">event</span><span class="p">.</span><span class="nx">respondWith</span><span class="p">(</span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">request</span><span class="p">))</span>
+<span class="p">})</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Fetch and log a given request object</span>
+<span class="cm"> * @param {Request} request</span>
+<span class="cm"> */</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span>
+<span class="w">      </span><span class="ow">new</span><span class="w"> </span><span class="nx">URL</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">).</span><span class="nx">origin</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">new_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Request</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">url</span><span class="p">,</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">cf</span><span class="o">:</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">cf</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">body</span><span class="o">:</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">redirect</span><span class="o">:</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">redirect</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">new_request</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">301</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">302</span><span class="p">){</span>
+<span class="w">    </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Response</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">response</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span>
+<span class="w">      </span><span class="s2">"location"</span><span class="p">,</span>
+<span class="w">      </span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">URL</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">).</span><span class="nx">origin</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">        </span><span class="s1">'/'</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'location'</span><span class="p">)</span>
+<span class="w">      </span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">response</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>中间也折腾了蛮久，主要问题是<code>fetch()</code>获取的response是附带const属性的，不能直接修改，因此需要新建一个。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-11-03-compress-images-with-tinypng/"><span class="mono">← Newer</span>Accelerate Your Website by Minimizing Embedded Images</a><a class="next" href="/blog/2020-10-10-whats-conways-game-of-life/"><span class="mono">Older →</span>What&#x27;s Conway&#x27;s Game of Life</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

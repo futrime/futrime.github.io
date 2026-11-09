@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub实现自动更新子模块 · Zijian Zhang</title>
+<meta name="description" content="当我们的仓库中使用到子模块，并且需要保持最新版本时，可以使用GitHub Actions实现自动更新。">
+<meta property="og:title" content="GitHub实现自动更新子模块 · Zijian Zhang">
+<meta property="og:description" content="当我们的仓库中使用到子模块，并且需要保持最新版本时，可以使用GitHub Actions实现自动更新。">
+<link rel="canonical" href="https://zjzh.me/blog/2022-09-23-github实现自动更新子模块/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--lilac)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2022.09.23 · 中文</div>
+      <h1>GitHub实现自动更新子模块</h1>
+      <p class="lede">当我们的仓库中使用到子模块，并且需要保持最新版本时，可以使用GitHub Actions实现自动更新。</p>
+      <div class="tags"><span class="chip">GitHub</span><span class="chip">子模块</span><span class="chip">自动化</span><span class="chip">GitHub Actions</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/bc993790f226.jpg" alt=""></figure>
+    <div class="prose zh">
+<h2 id="_1">导言</h2>
+<p>在开发较大规模的项目时，为了管理方便，我们通常会将项目拆分成多个子模块，使用不同的仓库进行管理，并使用Git的子模块（Submodule）功能引入到同一个主仓库中。</p>
+<p>但是，由于不同的仓库分别管理提交记录（Commit）和版本，我们需要在引用的仓库中持续更新，以保证各个模块最新。在传统的版本管理中，我们需要将仓库拉取到本地，手动运行更新命令，然后再提交和推送。这种管理方式比较麻烦，而且手动操作有可能产生意料之外的错误。</p>
+<p>GitHub Actions是一个基于GitHub仓库和Git工具的持续集成和部署自动化工具。直观来说，GitHub Action就是负责在某个事件发生时，在某个特定环境下，进行某些特定操作序列。</p>
+<p><img loading="lazy" alt="GitHub Actions" src="/blog/img/d75187a08f9d.png" /></p>
+<p>GitHub Actions运行的基本单元是工作流（Workflow），由<code>.github/workflows/</code>下的配置文件实现。在每一个工作流配置文件中，主要包含两部分：事件触发器和工作任务。工作任务部分可以包含多个任务（Job），每个任务包含多个步骤（Step）。需要注意的是，在每一个任务中，所有步骤必须在同一个环境下运行；而不同的任务间环境（包括文件）并不共享，而需要使用缓存（Cache）或成品（Artifact）进行共享。这也是GitHub Actions区分任务和步骤的原因。</p>
+<h2 id="_2">方法</h2>
+<p>需要在仓库内的<code>.github/workflows/</code>目录下建立一个<code>.yml</code>文件，不妨命名为<code>update_submodules.yml</code>。需要注意的是，仅有默认分支下的工作流可以被执行，所以当你在其他分支修改工作流配置文件后，请同步到默认分支。</p>
+<p>先给工作流命个名吧，在<code>update_submodules.yml</code>写入以下内容：</p>
+<div class="hl"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update Submodules</span>
+</code></pre></div>
+
+<h3 id="_3">事件触发器</h3>
+<p>我们定义两个事件触发器：手动运行和每15分钟自动运行。在<code>update_submodules.yml</code>写入以下内容：</p>
+<div class="hl"><pre><span></span><code><span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s">"*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span>
+<span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
+</code></pre></div>
+
+<p><code>schedule</code>事件触发器用于定时执行任务。其中的<code>cron</code>参数配置和Linux下<code>cron</code>命令配置文件格式一致。但需要注意的是，GitHub允许定时执行的最高频率是15分钟，且不保证一定能够运行。</p>
+<p><code>workflow_dispatch</code>事件触发器用于在Actions菜单中添加一个手动运行按钮。</p>
+<h3 id="_4">工作任务</h3>
+<p>由于我们只需要一个环境，因此只需要一个任务。在<code>update_submodules.yml</code>写入以下内容：</p>
+<div class="hl"><pre><span></span><code><span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">update_sdk</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update submodules</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">git submodule update --init --remote</span>
+<span class="w">          </span><span class="no">git config --global user.name "github-actions[bot]"</span>
+<span class="w">          </span><span class="no">git config --global user.email "github-actions[bot]@users.noreply.github.com"</span>
+<span class="w">          </span><span class="no">git commit -am "Update SDK" || exit 0</span>
+<span class="w">          </span><span class="no">git push || exit 0</span>
+</code></pre></div>
+
+<p>在第一个步骤（Checkout）中，我们签出仓库的默认分支，这类似于在本地运行<code>git clone</code>命令。</p>
+<p>在第二个步骤（Update submodules）中，我们运行一系列命令，实现更新子模块、提交、推送。这里利用到一个有趣的特性，那就是GitHub Actions环境中必然有能读写仓库的密钥，因此不需要另外配置密钥。</p>
+<p>保存、提交并推送，很快就能看到自动更新的运行效果了。</p>
+<h2 id="_5">参考资料</h2>
+<ol>
+<li><a href="https://git-scm.com/docs/git-submodule" target="_blank" rel="noopener">Git - git-submodule Documentation</a></li>
+<li><a href="https://docs.github.com/en/actions" target="_blank" rel="noopener">GitHub Actions Documentation - GitHub Docs</a></li>
+<li><a href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows" target="_blank" rel="noopener">Events that trigger workflows - GitHub Docs</a></li>
+<li><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions" target="_blank" rel="noopener">Workflow syntax for GitHub Actions - GitHub Docs</a></li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2022-11-03-cheatsheet是如何炼成的/"><span class="mono">← Newer</span>Cheatsheet是如何炼成的</a><a class="next" href="/blog/2022-09-17-start-blogging-with-hugo-and-github-pages/"><span class="mono">Older →</span>Start Blogging with Hugo and GitHub Pages</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

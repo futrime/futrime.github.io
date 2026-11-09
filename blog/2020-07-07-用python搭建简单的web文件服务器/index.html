@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>用Python搭建简单的Web文件服务器 · Zijian Zhang</title>
+<meta name="description" content="有时我们想要把电脑上的文件传到手机或其它设备上，又苦于微信/QQ/百度网盘等软件文件大小限制或极慢的速度，此时Python Web服务器便十分重要。">
+<meta property="og:title" content="用Python搭建简单的Web文件服务器 · Zijian Zhang">
+<meta property="og:description" content="有时我们想要把电脑上的文件传到手机或其它设备上，又苦于微信/QQ/百度网盘等软件文件大小限制或极慢的速度，此时Python Web服务器便十分重要。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-07-07-用python搭建简单的web文件服务器/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.07.07 · 中文</div>
+      <h1>用Python搭建简单的Web文件服务器</h1>
+      <p class="lede">有时我们想要把电脑上的文件传到手机或其它设备上，又苦于微信/QQ/百度网盘等软件文件大小限制或极慢的速度，此时Python Web服务器便十分重要。</p>
+      <div class="tags"><span class="chip">Python</span><span class="chip">Web</span><span class="chip">服务器</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/958a655f626d.jpg" alt=""></figure>
+    <div class="prose zh">
+<p>首先要装Python 3，Linux用户请参考<a href="https://docs.python.org/zh-cn/3/using/unix.html" target="_blank" rel="noopener">在Unix平台中使用Python</a>，Windows用户可以直接在官网下载安装：https://www.python.org/downloads/windows/ ，.zip文件是Portable版本，可以直接运行，其它的需要安装。</p>
+<p><img loading="lazy" alt="Screenshot_2020-07-08 Python Releases for Windows.png" src="/blog/img/bd150c257971.png" /></p>
+<p>（Windows用户）然后去到需要分享的文件夹，按住 <code>Shift</code> 并右键单击空白处，选择 <code>在此处打开Powershell窗口</code> 或者 <code>在此处打开命令提示符</code>。</p>
+<p><img loading="lazy" alt="批注 2020-07-08 144550.jpg" src="/blog/img/0ae9fc4d53a0.jpg" /></p>
+<p>输入命令 <code>python3 -m http.server</code> （Windows下<code>python3</code>可能要换成<code>python</code>或<code>py</code>）即可，默认使用端口8000.</p>
+<p><img loading="lazy" alt="Screenshot_2020-07-08 Directory listing for .png" src="/blog/img/69bf35139298.png" /></p>
+<p>如果需要指定端口，输入  <code>python3 -m http.server &lt;端口号&gt;</code>，需要指定目录，输入  <code>python3 -m http.server -d &lt;目录&gt;</code>。</p>
+<p>Portable版本比较麻烦，需要输入完整Python程序路径而非<code>python</code>这样的简写。</p>
+<p>如果需要做成可以直接用的Python脚本，新建Python文件，输入以下内容：</p>
+<div class="hl"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">http.server</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">socketserver</span>
+
+<span class="n">PORT</span> <span class="o">=</span> <span class="mi">8000</span> <span class="c1"># 端口号</span>
+
+<span class="n">Handler</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">SimpleHTTPRequestHandler</span>
+
+<span class="k">with</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">((</span><span class="s2">""</span><span class="p">,</span> <span class="n">PORT</span><span class="p">),</span> <span class="n">Handler</span><span class="p">)</span> <span class="k">as</span> <span class="n">httpd</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"serving at port"</span><span class="p">,</span> <span class="n">PORT</span><span class="p">)</span>
+    <span class="n">httpd</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+</code></pre></div>
+
+<p>参考链接：</p>
+<ol>
+<li>https://docs.python.org/zh-cn/3.7/library/http.server.html</li>
+<li>
+<p>https://www.python.org/downloads/windows/</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-07-08-网易云音乐ncm格式转mp3格式/"><span class="mono">← Newer</span>网易云音乐NCM格式转MP3格式</a><a class="next" href="/blog/2020-07-06-python实现打开浏览器/"><span class="mono">Older →</span>Python实现打开浏览器</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

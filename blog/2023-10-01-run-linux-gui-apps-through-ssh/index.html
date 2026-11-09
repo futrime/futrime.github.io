@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run Linux GUI Apps through SSH · Zijian Zhang</title>
+<meta name="description" content="For Linux server distributions without GUI...">
+<meta property="og:title" content="Run Linux GUI Apps through SSH · Zijian Zhang">
+<meta property="og:description" content="For Linux server distributions without GUI...">
+<link rel="canonical" href="https://zjzh.me/blog/2023-10-01-run-linux-gui-apps-through-ssh/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--pink)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2023.10.01 · English</div>
+      <h1>Run Linux GUI Apps through SSH</h1>
+      <p class="lede">For Linux server distributions without GUI...</p>
+      <div class="tags"><span class="chip">Linux</span><span class="chip">SSH</span><span class="chip">GUI</span><span class="chip">X11</span></div>
+    </header>
+    
+    <div class="prose">
+<p>As a Linux server and Windows user, I often need to run Linux GUI apps but do not wanna install a GUI on the server. So I use SSH to run GUI apps on the server and display them on my Windows machine.</p>
+<h2 id="install-x11-server-on-windows">Install X11 Server on Windows</h2>
+<p>Download and install VcXsrv from <a href="https://sourceforge.net/projects/vcxsrv/" target="_blank" rel="noopener">https://sourceforge.net/projects/vcxsrv/</a>.</p>
+<p>Run the XLauncher and keep the default settings.</p>
+<h2 id="install-x11-client-on-linux">Install X11 Client on Linux</h2>
+<div class="hl"><pre><span></span><code>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>xorg<span class="w"> </span>openbox
+</code></pre></div>
+
+<h2 id="enable-x11-forwarding-on-the-server">Enable X11 forwarding on the server</h2>
+<p>Edit <code>/etc/ssh/sshd_config</code> and modify the following line:</p>
+<div class="hl"><pre><span></span><code>X11Forwarding<span class="w"> </span>yes
+</code></pre></div>
+
+<h2 id="restart-ssh-service">Restart SSH service</h2>
+<div class="hl"><pre><span></span><code>sudo<span class="w"> </span>service<span class="w"> </span>ssh<span class="w"> </span>restart
+</code></pre></div>
+
+<h2 id="connect-to-the-server">Connect to the server</h2>
+<div class="hl"><pre><span></span><code>ssh<span class="w"> </span>-X<span class="w"> </span>user@server-ip-address
+</code></pre></div>
+
+<h2 id="run-gui-apps">Run GUI apps</h2>
+<p>Run xeyes to test:</p>
+<div class="hl"><pre><span></span><code>xeyes
+</code></pre></div>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2023-10-01-why-did-i-fail-to-install-ubuntu-server-on-hyper-v/"><span class="mono">← Newer</span>Why Did I Fail to Install Ubuntu Server on Hyper-V?</a><a class="next" href="/blog/2023-09-10-set-interface-category-in-windows/"><span class="mono">Older →</span>Set Interface Category in Windows</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

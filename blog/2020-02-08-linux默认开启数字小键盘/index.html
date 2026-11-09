@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lubuntu默认开启数字小键盘 · Zijian Zhang</title>
+<meta name="description" content="想必很多使用Linux桌面系统的用户都会遇到这样一个棘手问题：登录界面的数字小键盘默认是关闭的，下意识输入数字密码的时候总是会出问题。这篇文章我将会简单地讲一下Linux桌面系统下默认开启数字小键盘的方法。">
+<meta property="og:title" content="Lubuntu默认开启数字小键盘 · Zijian Zhang">
+<meta property="og:description" content="想必很多使用Linux桌面系统的用户都会遇到这样一个棘手问题：登录界面的数字小键盘默认是关闭的，下意识输入数字密码的时候总是会出问题。这篇文章我将会简单地讲一下Linux桌面系统下默认开启数字小键盘的方法。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-02-08-linux默认开启数字小键盘/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--lilac)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.02.08 · 中文</div>
+      <h1>Lubuntu默认开启数字小键盘</h1>
+      <p class="lede">想必很多使用Linux桌面系统的用户都会遇到这样一个棘手问题：登录界面的数字小键盘默认是关闭的，下意识输入数字密码的时候总是会出问题。这篇文章我将会简单地讲一下Linux桌面系统下默认开启数字小键盘的方法。</p>
+      <div class="tags"><span class="chip">Linux</span><span class="chip">Numlock</span><span class="chip">数字小键盘</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/c970c3b92bc4.jpg" alt=""></figure>
+    <div class="prose zh">
+<p>在Ubuntu等某些Linux桌面系统中有相关的设置，只要打开就好了。</p>
+<p>但是在Linux Mint、Lubuntu、Debian等其他的Linux桌面系统中，相关设置不可用或者根本没有相关设置，此时就需要以下步骤处理：</p>
+<p>首先，我们要安装关键软件 <code>numlockx</code> 。</p>
+<div class="hl"><pre><span></span><code>sudo apt update &amp;&amp; sudo apt install numlockx
+</code></pre></div>
+
+<p>然后 <em>在root权限或者sudo权限下</em> 编辑 <code>/etc/lightdm/lightdm.conf</code> 文件。在最后新加一行：</p>
+<div class="hl"><pre><span></span><code>greeter-setup-script=/usr/bin/numlockx on
+</code></pre></div>
+
+<p>保存重启即可看到效果。</p>
+<h4 id="rootsudo">附：如何在root权限或者sudo权限下编辑？</h4>
+<p>我们可以直接登陆root账户，或者登录sudo用户组的用户（一般Ubuntu系列的默认用户）后在命令前输入<code>sudo</code>即可。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-02-09-linux下搭建python环境/"><span class="mono">← Newer</span>Linux下搭建Python环境</a><a class="next" href="/blog/2020-02-07-linux桌面系统显示屏分辨率-刷新率的简单设置/"><span class="mono">Older →</span>Linux桌面系统显示屏分辨率/刷新率的简单设置</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

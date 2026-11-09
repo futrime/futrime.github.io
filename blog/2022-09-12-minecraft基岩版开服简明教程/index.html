@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minecraft基岩版开服简明教程 · Zijian Zhang</title>
+<meta name="description" content="随着Minecraft的发展和微软的推动，加上如LiteLoaderBDS等第三方工具的开发，基岩版已经具备比肩Java版的拓展性，从而得到越来越多玩家青睐。本文将简要介绍如何使用Minecraft基岩版专用服务器（BDS）开服在Windows平台开服。">
+<meta property="og:title" content="Minecraft基岩版开服简明教程 · Zijian Zhang">
+<meta property="og:description" content="随着Minecraft的发展和微软的推动，加上如LiteLoaderBDS等第三方工具的开发，基岩版已经具备比肩Java版的拓展性，从而得到越来越多玩家青睐。本文将简要介绍如何使用Minecraft基岩版专用服务器（BDS）开服在Windows平台开服。">
+<link rel="canonical" href="https://zjzh.me/blog/2022-09-12-minecraft基岩版开服简明教程/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2022.09.12 · 中文</div>
+      <h1>Minecraft基岩版开服简明教程</h1>
+      <p class="lede">随着Minecraft的发展和微软的推动，加上如LiteLoaderBDS等第三方工具的开发，基岩版已经具备比肩Java版的拓展性，从而得到越来越多玩家青睐。本文将简要介绍如何使用Minecraft基岩版专用服务器（BDS）开服在Windows平台开服。</p>
+      <div class="tags"><span class="chip">Minecraft</span><span class="chip">基岩版</span><span class="chip">服务器</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/8588ac843e0b.webp" alt=""></figure>
+    <div class="prose zh">
+<h2 id="_1">系统要求</h2>
+<ul>
+<li>CPU：至少具备两个物理核心的64位Intel或AMD的x86处理器</li>
+<li>运行内存：至少1GB</li>
+<li>操作系统：Windows 10 1703或更新；或Windows Server 2016或更新</li>
+</ul>
+<p>如果你希望在自己的电脑上同时运行服务端和游戏，你需要在带有管理员权限的PowerShell窗口（在开始菜单中右键PowerShell并选择以管理员身份运行以打开）中输入并执行以下命令：</p>
+<div class="hl"><pre><span></span><code><span class="n">CheckNetIsolation</span><span class="p">.</span><span class="n">exe</span> <span class="n">LoopbackExempt</span> <span class="n">-a</span> <span class="n">-p</span><span class="p">=</span><span class="n">S</span><span class="p">-</span><span class="n">1</span><span class="p">-</span><span class="n">15</span><span class="p">-</span><span class="n">2</span><span class="p">-</span><span class="n">1958404141</span><span class="p">-</span><span class="n">86561845</span><span class="p">-</span><span class="n">1752920682</span><span class="p">-</span><span class="n">3514627264</span><span class="p">-</span><span class="n">368642714</span><span class="p">-</span><span class="n">62675701</span><span class="p">-</span><span class="n">733520436</span>
+</code></pre></div>
+
+<h2 id="_2">安装配置</h2>
+<p>前往<a href="https://www.minecraft.net/download/server/bedrock" target="_blank" rel="noopener">Minecraft官方下载页面</a>。</p>
+<p><img loading="lazy" alt="基岩版服务器下载|Minecraft" src="/blog/img/d65fa1040860.png" /></p>
+<p>在左边的Windows服务端下载板块内，勾选<strong>I agree to the Minecraft End User License Agreement and Privacy Policy</strong>前的选择框，然后点击<strong>下载</strong>。</p>
+<p>建立一个新文件夹，将下载得到的压缩包内所有内容解压到该文件夹内。</p>
+<p><img loading="lazy" alt="解压得到的文件" src="/blog/img/79ba83584989.png" /></p>
+<p>运行 <code>bedrock_server.exe</code> ，等待初次启动完成。你可能会遇到如下弹窗，点击<strong>允许访问</strong>即可。</p>
+<p><img loading="lazy" alt="防火墙弹窗" src="/blog/img/7d4ef0662f3e.png" /></p>
+<p>初次启动成功后，输入并执行 <code>stop</code> 关闭服务端。用文本编辑器打开 <code>server.properties</code> 编辑配置。主要关注以下内容：</p>
+<div class="hl"><pre><span></span><code>server-name=Dedicated Server
+# 服务器名称，可以是任何不含英文分号的字符串
+
+gamemode=survival
+# 新玩家的游戏模式，可以是“survival” 、“creative”或“adventure”
+
+difficulty=easy
+# 游戏难度，可以是“peaceful”、“easy”、“normal”或“hard”
+
+level-name=Bedrock level
+# 存档名称，如果需要使用自己的存档，就要修改
+</code></pre></div>
+
+<p>如果需要使用自己的存档，请将导出的 <code>.mcworld</code> 存档后缀名改为 <code>.zip</code> ，然后在服务端 <code>worlds</code> 内建立一个以前面 <code>level-name</code> 设置的字符串为名字的文件夹，并将存档压缩包内所有内容解压到这个文件夹。</p>
+<p>最后再次运行 <code>bedrock_server.exe</code> 即可开服。</p>
+<h2 id="mod">Mod安装</h2>
+<p>虽然基岩版不支持Java版的Mod，但得益于官方提供的Addon支持，以及第三方插件加载工具（如LiteLoaderBDS）的发展，基岩版已经能够安装大量的拓展了。欲知更多，且听下回分解。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2022-09-13-柏林噪声/"><span class="mono">← Newer</span>柏林噪声与MC</a><a class="next" href="/blog/2021-09-27-visual-studio-code-2019配置msvc编译环境/"><span class="mono">Older →</span>Visual Studio Code配置MSVC编译环境</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

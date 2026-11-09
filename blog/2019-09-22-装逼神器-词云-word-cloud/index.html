@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>装逼神器——词云(Word Cloud) · Zijian Zhang</title>
+<meta name="description" content="WordCloud词云是一种数据可视化形式。">
+<meta property="og:title" content="装逼神器——词云(Word Cloud) · Zijian Zhang">
+<meta property="og:description" content="WordCloud词云是一种数据可视化形式。">
+<link rel="canonical" href="https://zjzh.me/blog/2019-09-22-装逼神器-词云-word-cloud/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--teal)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2019.09.22 · 中文</div>
+      <h1>装逼神器——词云(Word Cloud)</h1>
+      <p class="lede">WordCloud词云是一种数据可视化形式。</p>
+      <div class="tags"><span class="chip">改编</span><span class="chip">Python</span><span class="chip">词云</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/13077f38a4af.jpg" alt=""></figure>
+    <div class="prose zh">
+<p><a href="http://amueller.github.io/word_cloud/index.html" target="_blank" rel="noopener">WordCloud词云</a>是一种数据可视化形式</p>
+<ul>
+<li>不会的时候，感觉很厉害</li>
+<li>会用了之后，感觉别人都玩烂了</li>
+</ul>
+<p>这篇文章就教大家如何使用Python生成词云</p>
+<h3 id="_1">准备工作</h3>
+<p>先要安装wordcloud（本体），matplotlib（绘图），jieba（中文分词），PIL（依赖）这些库。</p>
+<p>使用pip安装：
+    pip install wordcloud matplotlib jieba PIL</p>
+<h3 id="wordcloud">WordCloud()函数介绍</h3>
+<p><code>WordCloud()</code> 的参数如下：</p>
+<ul>
+<li><code>font_path</code> ：可用于指定字体路径，包括otf和ttf</li>
+<li><code>width</code> ：词云的宽度，默认为400</li>
+<li><code>height</code> ：词云的高度，默认为200</li>
+<li><code>mask</code> ：蒙版，可用于定制词云的形状</li>
+<li><code>min_font_size</code> ：最小字号，默认为4</li>
+<li><code>max_font_size</code> ：最大字号，默认为词云的高度</li>
+<li><code>max_words</code> ：词的最大数量，默认为200</li>
+<li><code>stopwords</code> ：将被忽略的停用词，如果不指定则使用默认的停用词词库</li>
+<li><code>background_color</code> ：背景颜色，默认为black</li>
+<li><code>mode</code> ：默认为RGB模式，如果为RGBA模式且background_color设为None，则背景将透明</li>
+</ul>
+<h3 id="_2">从零开始</h3>
+<ul>
+<li>导入库<p>from wordcloud import WordCloud
+  import matplotlib.pyplot as plt
+Matplotlib是一个Python 2D绘图库，可以生成各种硬拷贝格式和跨平台交互式环境的出版物质量数据。<a href="https://matplotlib.org/" target="_blank" rel="noopener">官方网站</a></p>
+</li>
+</ul>
+<ul>
+<li>生成WordCloud<p>wc = WordCloud().generate(open('input.txt').read())
+这里的 <code>input.txt</code> 可以是一篇文章、一本书，甚至无序的数字序列，WordCloud将会根据词频自动输出。</p>
+</li>
+</ul>
+<p>如果使用Linux无界面操作系统或者Jupyter Notebook，中文有可能会出现无字体的问题，那么就需要自定义字体路径：</p>
+<div class="hl"><pre><span></span><code>wc = WordCloud(font_path='font.ttf').generate(open('input.txt').read())
+</code></pre></div>
+
+<p>其中font.ttf是自定义的字体路径，建议放在同目录下。</p>
+<ul>
+<li>显示图片</li>
+</ul>
+<p>这里用到了万能的Matplotlib，可以在有GUI的环境下或者Jupyter Notebook下预览图片：</p>
+<div class="hl"><pre><span></span><code>plt.imshow(wc, interpolation='bilinear')
+plt.axis('off')
+plt.show()
+</code></pre></div>
+
+<p>Matplotlib在Jupyter Notebook有时候会出现调用时只显示对象摘要不输出图片的问题，这个时候重新执行一次就可以了，效果如下：</p>
+<p><img loading="lazy" alt="v2-3ef01c6602a5a1257d0d83d8d1c004b0_hd.jpg" src="/blog/img/ce712d542206.jpg" /></p>
+<ul>
+<li>Chinese Trick</li>
+</ul>
+<p>你可能注意到了，这个时候词语好像不太对劲，本来好好的“行者”硬是被分成了“行者道”。这是因为WordCloud本身并不是专门为中文适配的，所以我们要祭出<a href="https://github.com/fxsjy/jieba" target="_blank" rel="noopener">jieba</a>来给中文分词：</p>
+<div class="hl"><pre><span></span><code>import jieba
+text = ' '.join(jieba.cut(text))
+</code></pre></div>
+
+<p>到此，Word Cloud就告一段落啦，是不是十分简单？</p>
+<p>参考链接：
+<a href="https://zhuanlan.zhihu.com/p/44165235" target="_blank" rel="noopener">03 高端又一般的词云</a>
+<a href="https://matplotlib.org/" target="_blank" rel="noopener">Matplotlib</a>
+<a href="https://github.com/fxsjy/jieba" target="_blank" rel="noopener">结巴</a>
+<a href="http://amueller.github.io/word_cloud/index.html" target="_blank" rel="noopener">WordCloud</a></p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-01-24-从零开始的爬虫教程-1-从urllib开始/"><span class="mono">← Newer</span>从零开始的爬虫教程（1）——从urllib开始</a><a class="next" href="/blog/2019-08-30-从windows-7到windows-10/"><span class="mono">Older →</span>从Windows 7到Windows 10</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

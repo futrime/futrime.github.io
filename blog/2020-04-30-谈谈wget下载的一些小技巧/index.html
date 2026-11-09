@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>谈谈wget下载的一些小技巧 · Zijian Zhang</title>
+<meta name="description" content="wget是Linux系列操作系统上的一个基本上可以称作“标配”的小软件，可以用来下载互联网上的文件。它支持HTTP、HTTPS、FTP和FTPS协议，可以说是非常实用。这篇文章中我将会简单介绍一下wget使用的一些小技巧。">
+<meta property="og:title" content="谈谈wget下载的一些小技巧 · Zijian Zhang">
+<meta property="og:description" content="wget是Linux系列操作系统上的一个基本上可以称作“标配”的小软件，可以用来下载互联网上的文件。它支持HTTP、HTTPS、FTP和FTPS协议，可以说是非常实用。这篇文章中我将会简单介绍一下wget使用的一些小技巧。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-04-30-谈谈wget下载的一些小技巧/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--lilac)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.04.30 · 中文</div>
+      <h1>谈谈wget下载的一些小技巧</h1>
+      <p class="lede">wget是Linux系列操作系统上的一个基本上可以称作“标配”的小软件，可以用来下载互联网上的文件。它支持HTTP、HTTPS、FTP和FTPS协议，可以说是非常实用。这篇文章中我将会简单介绍一下wget使用的一些小技巧。</p>
+      <div class="tags"><span class="chip">wget</span><span class="chip">下载</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/d7d04c312d4d.jpg" alt=""></figure>
+    <div class="prose zh">
+<h3 id="_1">安装</h3>
+<p>如果你的Linux系统上还没有安装wget，可以使用如下命令安装：</p>
+<div class="hl"><pre><span></span><code>apt install wget -y
+</code></pre></div>
+
+<p>或</p>
+<div class="hl"><pre><span></span><code>yum install wget -y
+</code></pre></div>
+
+<p>某位大神创造了wget的多线程版本mwget，但是是基于Python的（也就是说支持Windows）。我们可以在已经安装了pip的系统上使用如下命令安装：</p>
+<div class="hl"><pre><span></span><code>pip install mwget
+</code></pre></div>
+
+<p>使用方法同wget，但是把<code>wget xxxxx</code>改成<code>mwget xxxxx</code>或者<code>python -m mwget xxxxx</code>。</p>
+<h3 id="_2">使用技巧</h3>
+<p>基本的文件下载：</p>
+<div class="hl"><pre><span></span><code>wget &lt;URL&gt;
+</code></pre></div>
+
+<p>如果文件比较大，有可能会连接丢失，可以使用断点续传：</p>
+<div class="hl"><pre><span></span><code>wget -c &lt;URL&gt;
+</code></pre></div>
+
+<p>如果想要把一整个网站（的静态页面部分）扒下来，可以使用：</p>
+<div class="hl"><pre><span></span><code>wget -r &lt;URL&gt;
+</code></pre></div>
+
+<p>这将会把从指定的URL开始所有超链接引用的资源都下载下来，但是如果网页中的链接用了绝对地址（http://xxx.xxx/xxx这样的)就无法正常本地访问，因此需要加上参数<code>-k</code>：</p>
+<div class="hl"><pre><span></span><code>wget -r -k &lt;URL&gt;
+</code></pre></div>
+
+<p>如果我们只是想下载一个网页而不是整个网站，我们需要使用到<code>-p</code>和<code>-np</code>指令：</p>
+<div class="hl"><pre><span></span><code>wget -p -k -np &lt;URL&gt;
+</code></pre></div>
+
+<p>在上面的指令中，如果下载的页面有问题，那么就把<code>-np</code>去掉。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-05-01-大家来康康我收集的精品叭/"><span class="mono">← Newer</span>大家来康康我收集的精品叭</a><a class="next" href="/blog/2020-04-29-请关注我的gitee项目/"><span class="mono">Older →</span>请关注我的Gitee项目</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

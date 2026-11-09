@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docker报错 standard_init_linux.go:207: exec user process caused exec format error · Zijian Zhang</title>
+<meta name="description" content="Docker报错 standard_init_linux.go:207: exec user process caused exec format error">
+<meta property="og:title" content="Docker报错 standard_init_linux.go:207: exec user process caused exec format error · Zijian Zhang">
+<meta property="og:description" content="Docker报错 standard_init_linux.go:207: exec user process caused exec format error">
+<link rel="canonical" href="https://zjzh.me/blog/2020-06-14-docker报错-standard-init-linux-go-207-exec-user-process-caused-exec-format-error/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--lilac)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.06.14 · 中文</div>
+      <h1>Docker报错 standard_init_linux.go:207: exec user process caused exec format error</h1>
+      
+      <div class="tags"><span class="chip">Docker</span><span class="chip">跨平台</span><span class="chip">ARM</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/0514d671ead1.png" alt=""></figure>
+    <div class="prose zh">
+<p>近日在NanoPi NEO上面尝试运行某个镜像的时候报错如下：</p>
+<div class="hl"><pre><span></span><code>standard_init_linux.go:207: exec user process caused "exec format error"
+</code></pre></div>
+
+<p>报错信息可能不尽相同（随着Docker版本不同有所不同），但是十分相似。</p>
+<p>这是因为运行的镜像存在某些层没有在相应CPU架构上编译。这常常在各种arm开发板上或32位操作系统上见到，因为有很多镜像都是只适用于x86-64架构。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-06-20-python多维列表的一些坑/"><span class="mono">← Newer</span>Python多维列表的一些坑</a><a class="next" href="/blog/2020-06-13-hyper-v安装系统时报错-no-operating-system-was-loaded/"><span class="mono">Older →</span>Hyper-V安装系统时报错 No operating system was loaded</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>什么是HTTPS降级攻击？遇到了怎么办？ · Zijian Zhang</title>
+<meta name="description" content="HTTPS协议降级攻击可以说是源于HTTPS协议对于当下HTTP协议主导的世界的一个妥协。这篇文章我就简单谈谈HTTPS降级攻击的原理和预防方法。">
+<meta property="og:title" content="什么是HTTPS降级攻击？遇到了怎么办？ · Zijian Zhang">
+<meta property="og:description" content="HTTPS协议降级攻击可以说是源于HTTPS协议对于当下HTTP协议主导的世界的一个妥协。这篇文章我就简单谈谈HTTPS降级攻击的原理和预防方法。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-02-23-什么是https降级攻击-遇到了怎么办/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--gold)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.02.23 · 中文</div>
+      <h1>什么是HTTPS降级攻击？遇到了怎么办？</h1>
+      <p class="lede">HTTPS协议降级攻击可以说是源于HTTPS协议对于当下HTTP协议主导的世界的一个妥协。这篇文章我就简单谈谈HTTPS降级攻击的原理和预防方法。</p>
+      <div class="tags"><span class="chip">安全</span><span class="chip">网络安全</span><span class="chip">信息安全</span><span class="chip">HTTPS降级攻击</span><span class="chip">HTTPS</span><span class="chip">网络攻击</span><span class="chip">SSL</span><span class="chip">TLS</span><span class="chip">HSTS</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/edd5721279e1.png" alt=""></figure>
+    <div class="prose zh">
+<p>前段时间我发布了文章<a href="https://blog.futrime.com/freetalk/190.html" target="_blank" rel="noopener">《谈谈我们现在的HTTP环境》</a>，当时我认为只要使用了HTTPS就可以很好地保证上网的安全了,实————————直到我看到了这篇文章：<a href="https://zhuanlan.zhihu.com/p/22917510" target="_blank" rel="noopener">《HTTPS协议降级攻击原理》</a>。我才知道一句真理：道高一尺，魔高一丈\手动狗头。结果没过多久，又看到了这篇文章：<a href="https://www.cnblogs.com/index-html/p/https_hijack_hsts.html" target="_blank" rel="noopener">《躲避HSTS的HTTPS劫持》</a>，我才知道，原来魔不是高一丈，而是高了一里\滑稽\当然这里不讲。</p>
+<p>既然知道了，那就理所应当地承担起科普的责任~~水博客的方法~~给大家讲一下原理和预防方法吧。</p>
+<h3 id="_1">基本原理</h3>
+<p>在HTTPS协议设计之初，并不是使用先进的TLS协议，而是使用SSL协议或者旧版的TLS协议。这些协议中自身存在一些漏洞可以很容易被攻击（即使是所谓“新型”的SSL 3.0和TLS 1.1）。虽然SSL协议现在已经弃用了，但是为了兼容性（又是这个该死的兼容性）考虑，我们的浏览器和Web服务器往往都会兼容性支持旧的不安全的协议。（顺带一提，即使是当前广泛使用的TLS 1.2也有类似漏洞，新站长们记得升级TLS 1.3）</p>
+<p>浏览器和Web服务器间是通过ClientHello包和ServerHello包互相确认兼容的协议，并挑选最新那个出来用来传输数据。而这两个Hello包为了兼容性考虑（又是它！），一般都会使用旧的保守的有漏洞的协议。假如攻击者捕获了这两个Hello包，就可以利用已知的漏洞篡改内容，使得服务器和浏览器都以为对方只能使用旧的协议，从而在整个时长100个请求的连接中采用有漏洞的协议。进而攻击者就可以很容易窃听了。</p>
+<p>具体方式请看： https://zhuanlan.zhihu.com/p/22917510</p>
+<h3 id="_2">预防方法</h3>
+<p>很简单，直接在浏览器设置中禁用SSL协议的支持就好了。\狗头</p>
+<p>站长们也不要忘记了拒绝SSL协议的访问哦。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://www.cloudflare.com/learning/ssl/what-is-https/</li>
+<li>https://blog.futrime.com/freetalk/190.html</li>
+<li>https://zhuanlan.zhihu.com/p/22917510</li>
+<li>https://www.cnblogs.com/index-html/p/https_hijack_hsts.html</li>
+<li>
+<p>https://baike.baidu.com/item/ssl</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-03-01-谈谈这一个月使用lubuntu的感受/"><span class="mono">← Newer</span>谈谈这一个月使用Lubuntu的感受</a><a class="next" href="/blog/2020-02-17-谈谈我们现在的http环境/"><span class="mono">Older →</span>谈谈我们现在的HTTP环境</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linux桌面系统显示屏分辨率/刷新率的简单设置 · Zijian Zhang</title>
+<meta name="description" content="在Linux的桌面系统中，有时候我们会遇到系统不能正确识别显示器导致分辨率和刷新率异常，本篇博客我将简要介绍Linux下设置显示器分辨率和刷新率的方法。">
+<meta property="og:title" content="Linux桌面系统显示屏分辨率/刷新率的简单设置 · Zijian Zhang">
+<meta property="og:description" content="在Linux的桌面系统中，有时候我们会遇到系统不能正确识别显示器导致分辨率和刷新率异常，本篇博客我将简要介绍Linux下设置显示器分辨率和刷新率的方法。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-02-07-linux桌面系统显示屏分辨率-刷新率的简单设置/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--teal)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.02.07 · 中文</div>
+      <h1>Linux桌面系统显示屏分辨率/刷新率的简单设置</h1>
+      <p class="lede">在Linux的桌面系统中，有时候我们会遇到系统不能正确识别显示器导致分辨率和刷新率异常，本篇博客我将简要介绍Linux下设置显示器分辨率和刷新率的方法。</p>
+      <div class="tags"><span class="chip">Linux</span><span class="chip">桌面</span><span class="chip">显示屏</span><span class="chip">分辨率</span><span class="chip">刷新率</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/d455799e60cd.jpg" alt=""></figure>
+    <div class="prose zh">
+<p>Linux分辨率和刷新率不正确分为以下两种情况：</p>
+<ol>
+<li>可以正确识别可用分辨率</li>
+<li>无法正确识别分辨率</li>
+</ol>
+<p>第一种情况下，我们可以在系统设置——显示器设置中查看系统识别到的分辨率，如果有符合自己显示器的就可以选择应用。</p>
+<p>第二种情况下，或者第一种情况中没有适合的选项时候，我们就需要自己编写配置。我们首先需要知道自己显示器支持的分辨率和刷新率。如果不知道的可以前往显示器官网或者 http://detail.zol.com.cn 根据型号查看。具体操作流程如下：</p>
+<ol>
+<li>计算配置参数</li>
+</ol>
+<p>我们使用<code>gtf</code>命令计算所需要的参数，方法如下：
+    gtf &lt;列数&gt; &lt;行数&gt; &lt;刷新率&gt;
+例如我的显示器是 1440x900 60Hz，我就输入如下：
+    gtf 1440 900 60
+返回类似如下：
+      # 1440x900 @ 60.00 Hz (GTF) hsync: 55.92 kHz; pclk: 106.47 MHz
+      Modeline "1440x900_60.00"  106.47  1440 1520 1672 1904  900 901 904 932  -HSync +Vsync
+其中<code>Modeline</code>开头的一行就是计算出来的参数。</p>
+<ol>
+<li>将配置应用到显示屏上</li>
+</ol>
+<p>命令如下：
+    xrandr --newmode &lt;参数&gt;
+    xrandr --newmode "1440x900_60.00"  106.47  1440 1520 1672 1904  900 901 904 932  -HSync +Vsync
+其中 <code>&lt;参数&gt;</code> 是我们在上一步中计算出来的参数<code>Modeline</code>后面的部分。</p>
+<p>随后我们使用 <code>xrandr</code> 命令查看我们对应的显示器，以我的为例，命令返回如下字样：</p>
+<div class="hl"><pre><span></span><code>Screen 0: minimum 320 x 200, current 1440 x 900, maximum 8192 x 8192
+VGA-1 connected primary 1440x900+0+0 (normal left inverted right x axis y axis) 0mm x 0mm
+   1024x768      60.00  
+   800x600       60.32    56.25  
+   848x480       60.00  
+   640x480       59.94  
+   1440x900_60.00  60.00*
+HDMI-1 disconnected (normal left inverted right x axis y axis)
+HDMI-2 disconnected (normal left inverted right x axis y axis)
+DP-1 disconnected (normal left inverted right x axis y axis)
+DP-2 disconnected (normal left inverted right x axis y axis)
+</code></pre></div>
+
+<p>其中 <code>VGA-1</code> 就是我正在使用的显示器。输入以下命令将配置添加到显示器上：
+    xrandr --addmode &lt;显示器代号&gt; &lt;配置名&gt;
+其中显示器代号就是上面的 <code>VGA-1</code> ，配置名就是计算出来的Modeline后面的双引号部分（带引号），例如：
+    xrandr --addmode VGA-1 "1440x900_60.00"
+到这一步，显示器配置就可以说是成功地完成了，接下来要应用配置。</p>
+<p>我们有两种方法：</p>
+<ol>
+<li>使用如下命令</li>
+</ol>
+<div class="hl"><pre><span></span><code>xrandr --output &lt;显示器代号&gt; --mode &lt;配置名&gt;
+</code></pre></div>
+
+<p>例如：</p>
+<div class="hl"><pre><span></span><code>xrandr --output VGA-1 --mode "1440x900_60.00"
+</code></pre></div>
+
+<p>但是万一配置有误导致无法显示，我们只能重启恢复的，因此建议大家使用以下方法：</p>
+<ol>
+<li>打开设置——显示器设置，选择应用刚才添加的配置。</li>
+</ol>
+<p>在这种操作模式下，大部分设置软件都会有计时器，假如配置失败会在一定时间内或者按下<code>Esc</code>键自动恢复。</p>
+<p>到这一步，我们的设置就基本完成了，但是还存在一个问题，那就是这个设置会在重启后消失，重新配置比较麻烦。因此我们将以上步骤写在一个<code>.sh</code>文件中：</p>
+<div class="hl"><pre><span></span><code>xrandr<span class="w"> </span>--newmode<span class="w"> </span>&lt;参数&gt;
+xrandr<span class="w"> </span>--addmode<span class="w"> </span>&lt;显示器代号&gt;<span class="w"> </span>&lt;配置名&gt;
+xrandr<span class="w"> </span>--output<span class="w"> </span>&lt;显示器代号&gt;<span class="w"> </span>--mode<span class="w"> </span>&lt;配置名&gt;
+</code></pre></div>
+
+<p>使用 <code>chmod +x &lt;文件名&gt;.sh</code> 赋予可执行权限。</p>
+<p>以后每次开机登录后直接运行这个 <code>.sh</code> 文件就可以了。</p>
+<p>注意！一定要确保这个模式在你的当前显示器上可用后再进行这些操作（否则就只能重启了）。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-02-08-linux默认开启数字小键盘/"><span class="mono">← Newer</span>Lubuntu默认开启数字小键盘</a><a class="next" href="/blog/2020-02-01-电脑都坏了/"><span class="mono">Older →</span>电脑都坏了</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

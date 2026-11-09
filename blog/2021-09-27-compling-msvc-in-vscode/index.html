@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compiling C/C++ programs in VSCode with MSVC · Zijian Zhang</title>
+<meta name="description" content="Following the official tutorial, then you are to encounter a fatal error...">
+<meta property="og:title" content="Compiling C/C++ programs in VSCode with MSVC · Zijian Zhang">
+<meta property="og:description" content="Following the official tutorial, then you are to encounter a fatal error...">
+<link rel="canonical" href="https://zjzh.me/blog/2021-09-27-compling-msvc-in-vscode/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--lilac)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2021.09.27 · English</div>
+      <h1>Compiling C/C++ programs in VSCode with MSVC</h1>
+      <p class="lede">Following the official tutorial, then you are to encounter a fatal error...</p>
+      <div class="tags"><span class="chip">Visual Studio Code</span><span class="chip">VSCode</span><span class="chip">MSVC</span><span class="chip">compile</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/f0523cc60a3f.png" alt=""></figure>
+    <div class="prose">
+<p>Recently I'm attending my college's Computer Language and Programming Lesson, in which Visual Studio is required to use. However, for just a single file C program, Visual Studio resembles a steam engine used to crack nuts, not only wasting so many advanced features of it but also making the precedure much more complicated. But how to simplify it? I know you would say Visual Studio Code. That's what I'm discussing here. In this blog, I'm going to introduce how to configure VSCode for an easy compiling and debugging process.</p>
+<p>In fact, Microsoft has already given us <a href="https://code.visualstudio.com/docs/cpp/config-msvc" target="_blank" rel="noopener">an official tutorial</a> on how to use Windows C++ in Visual Studio Code, yet if following it, you are bound to a fatal error. So did I.</p>
+<p><img loading="lazy" alt="an image of the official tutorial" src="/blog/img/ed8478e4e9c6.png" /></p>
+<p>Fortunately, after struggling with the editor and the compiler for a whole morning, I ultimately grasp the key to make it. Here I'm presenting the detailed configuration procedure with Visual Studio 2019 (or the toolset of Visual Studio 2019).</p>
+<p>In the first few steps, the tutorial gives us the correct guidance, until step <a href="https://code.visualstudio.com/docs/cpp/config-msvc#_build-helloworldcpp" target="_blank" rel="noopener"><strong>Build helloworld.cpp</strong></a>.</p>
+<h3 id="the-actual-approach-to-configure-windows-c-msvc">The actual approach to configure Windows C++ (MSVC)</h3>
+<p>The configuration of environment variables comes first. Search <strong>path</strong> in the search box in your task bar and open <strong>Edit environment variables for your account</strong>.</p>
+<p><img loading="lazy" alt="search PATH in the search box" src="/blog/img/cbc9136cad81.png" /></p>
+<p>In the settings window, select <strong>Path</strong> and then click <strong>Edit...</strong>. Then in the pop-up window click <strong>New</strong> to add this value:</p>
+<div class="hl"><pre><span></span><code>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64
+</code></pre></div>
+
+<p>Repeat this step to add another value:</p>
+<div class="hl"><pre><span></span><code>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\
+</code></pre></div>
+
+<p>Just like this:
+<img loading="lazy" alt="an example of the environment variables configuration" src="/blog/img/63d0433c0d0b.png" /></p>
+<p>Click <strong>OK</strong> and then click <strong>OK</strong> again. Restart your Visual Studio Code.</p>
+<p>From the main menu, choose <strong>Termial &gt; Configure Default Build Task</strong>, then choose <strong>C/C++: cl.exe build active file</strong> listed in the dropdown. This will create a <code>tasks.json</code> file in <code>.vscode</code> folder in the root of your project folder. Open it in the editor, replacing all content with belows and save it:</p>
+<div class="hl"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0.0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"windows"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"shell"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"executable"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cmd.exe"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">"/C"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"VsDevCmd.bat"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"&amp;&amp;"</span>
+<span class="w">          </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"tasks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shell"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cl.exe build active file"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cl.exe"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">"/Zi"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"/EHsc"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"/Fe:"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"${fileDirname}\\${fileBasenameNoExtension}.exe"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"${file}"</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"problemMatcher"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"$msCompile"</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"group"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"build"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"isDefault"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+</code></pre></div>
+
+<p>Then return to your C source file, press <strong>Ctrl + Shift + B</strong>, and the program will be compiled.</p>
+<p>There is a bit difference between my sample and the offical example of <a href="https://code.visualstudio.com/docs/cpp/config-msvc#_run-vs-code-outside-the-developer-command-prompt" target="_blank" rel="noopener">running VS Code outside the Developer Command Prompt</a>: the second argument of <strong>windows.options.shell.args</strong> is no longer a full path. That's all due to a strange bug making the editor always to consider <code>C:/Program</code> a command.</p>
+<p>The next thing to do is debugging. Press <strong>F5</strong> or <strong>Ctrl + F5</strong> and the editor will prompt a dropdown menu. Select <strong>cl.exe build and debug active file</strong> in it.</p>
+<p><img loading="lazy" alt="a dropdown menu to choose debuggin configuration" src="/blog/img/cb3cbdbc44c8.png" /></p>
+<p>VS Code will create a <code>launch.json</code> in the identical folder <code>.vscode</code>. Open it and replace all the content with belows and save:</p>
+<div class="hl"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.2.0"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"configurations"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PowerShell Launch Script"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PowerShell"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"request"</span><span class="p">:</span><span class="w"> </span><span class="s2">"launch"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"script"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VsDevCmd.bat"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"cwd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${workspaceFolder}"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cl.exe - Build and debug active file"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cppvsdbg"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"request"</span><span class="p">:</span><span class="w"> </span><span class="s2">"launch"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"program"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${fileDirname}\\${fileBasenameNoExtension}.exe"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">            </span><span class="nt">"stopAtEntry"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"cwd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${fileDirname}"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"environment"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">            </span><span class="nt">"console"</span><span class="p">:</span><span class="w"> </span><span class="s2">"externalTerminal"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Then try to press <strong>F5</strong> or <strong>Ctrl + F5</strong>, and you will be in the debugging mode with pleasure. Now you can breathe a sigh of relief and enjoy a cup of coffee.</p>
+<p>What's more, in the official tutorial exists a more recommended method of simple C/C++ code building using GCC via mingw-w64. I've attempted to set it but failed, though. That's another story.</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2021-09-27-visual-studio-code-2019配置msvc编译环境/"><span class="mono">← Newer</span>Visual Studio Code配置MSVC编译环境</a><a class="next" href="/blog/2021-02-11-使用gost自由组建网络/"><span class="mono">Older →</span>使用GOST自由组建网络</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

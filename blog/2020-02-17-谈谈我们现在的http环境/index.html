@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>谈谈我们现在的HTTP环境 · Zijian Zhang</title>
+<meta name="description" content="前段时间我发了一篇文章《谈谈我们现在的DNS环境》，其实里面遇到的很多问题在HTTP协议中也遇到了，那么我就顺带着讲一下吧。">
+<meta property="og:title" content="谈谈我们现在的HTTP环境 · Zijian Zhang">
+<meta property="og:description" content="前段时间我发了一篇文章《谈谈我们现在的DNS环境》，其实里面遇到的很多问题在HTTP协议中也遇到了，那么我就顺带着讲一下吧。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-02-17-谈谈我们现在的http环境/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--lilac)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.02.17 · 中文</div>
+      <h1>谈谈我们现在的HTTP环境</h1>
+      <p class="lede">前段时间我发了一篇文章《谈谈我们现在的DNS环境》，其实里面遇到的很多问题在HTTP协议中也遇到了，那么我就顺带着讲一下吧。</p>
+      <div class="tags"><span class="chip">网络</span><span class="chip">环境</span><span class="chip">Web</span><span class="chip">运营商</span><span class="chip">HTTP</span><span class="chip">HTTP协议</span><span class="chip">劫持</span><span class="chip">HTTP劫持</span><span class="chip">广告</span><span class="chip">弹窗</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/83b8e3992d56.jpg" alt=""></figure>
+    <div class="prose zh">
+<p>作为Web世界最基础、最重要的协议之一，DNS协议承担了我们平时见到的所有网站的解析任务。但是随着社会和网络技术的发展，DNS协议在技术上逐渐落伍了，许许多多的漏洞和缺陷逐渐暴露了出来，并且被一些组织和机构所利用。</p>
+<h3 id="http">HTTP原理</h3>
+<p>HTTP的原理其实没有什么好说的，具体可以参考<a href="https://baike.baidu.com/item/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AE" target="_blank" rel="noopener">百度百科</a>。不过需要注意的一点就是HTTP版本：最早广泛使用的版本是HTTP/0.9，现在已经全面弃用。后来发展出了成熟的HTTP/1.0，目前仍然有少量旧网站使用。目前来说最广泛使用的是HTTP/1.1标准，也就是我们最常见的HTTP协议内容。前几年HTTP/2标准诞生，成为当下最安全最可靠的标准。但是这个标准必须要搭配HTTPS协议使用，因此这篇文章不讨论。</p>
+<h3 id="http_1">HTTP技术存在的问题</h3>
+<p>和上篇博文中的DNS技术存在的问题类似，HTTP的问题也是来源于它并没有提供加密。也就是说，当我们访问HTTP网站的时候，数据包经过的所有路由器和服务器是可以跟踪记录、拦截吞噬甚至篡改它的。这就相当于我们去寄信，结果信封忘记封了，那么快递员就可以神不知鬼不觉（我不知服务器不觉）的情况下窃取甚至篡改里面的文字。这种行为我们称之为<em>HTTP劫持</em>。</p>
+<p>很多人以为自己难以遇到HTTP劫持，但其实只不过是因为我们司空见惯罢了。HTTP劫持大多数情况下被宽带服务商用于在网页中添加广告，但是由于在中国，很多用户的计算机早就被各种各样的违法或合法甚至官方推广软件弹出的广告训练得“百毒不侵”了，而对于HTTP劫持的广告视而不见。</p>
+<p><img loading="lazy" alt="2.jpg" src="/blog/img/486ff541fe79.jpg" /></p>
+<p>上面这幅图右下角的悬浮广告是不是很熟悉？如果我们正在浏览一个网页，这个网页以前没有广告或者其他部分没有广告，却在某一天某一次访问的时候出现了这样的广告，那就看看地址栏吧。如果没有<code>https://</code>字样，或者没有小锁标志（没有使用安全的HTTPS协议），那九成是被劫持了。我们也可以右键点击这个广告，查看它的网址，如果这个网址是类似<code>gd.163.cn/.....</code>这样的话那肯定是劫持了。</p>
+<p>有时候劫持并不是悬浮广告，而是以干扰性更强的弹窗广告呈现。如下图所示：</p>
+<p><img loading="lazy" alt="2020-02-12-114136_1440x900_scrot.png" src="/blog/img/626335c733c6.png" /></p>
+<p>我使用了Firefox的弹窗拦截功能，所以没有直接弹出来。</p>
+<p>甚至还有更有干扰性的手段：在整个网页上增加一个覆盖层，只要点击了网页任何一个部分就会跳转到广告页面，如下：</p>
+<p><img loading="lazy" alt="2020-02-12-114150_1440x900_scrot.png" src="/blog/img/ae456a104936.png" /></p>
+<p>不过广告算小事，万一弹出来的是钓鱼网站（常常在公共Wi-Fi上容易出现）就麻烦大了。</p>
+<h3 id="_1">解决办法</h3>
+<p>其实很简单，只要我们确保访问的网站是支持HTTPS协议的就可以了。多看看地址栏，确保有<code>https://</code>前缀。另外我们也可以使用<a href="https://addons.mozilla.org/zh-CN/firefox/addon/https-everywhere/" target="_blank" rel="noopener">HTTPS Everywhere</a>、<a href="https://addons.mozilla.org/zh-CN/firefox/addon/smart-https-revived/" target="_blank" rel="noopener">Smart HTTPS</a>这类插件来帮助我们实现安全访问。</p>
+<p>不过令人头痛的是，目前国内还有很多知名网站不支持HTTPS。（点名：<a href="http://www.zol.com.cn/" target="_blank" rel="noopener">中关村在线</a>，不过居然Firefox官方论坛也不支持HTTPS：<a href="http://mozilla.com.cn" target="_blank" rel="noopener">火狐社区</a>）希望大家尽快重视起来吧。</p>
+<p>如果你是站长（像我一样），记得启用<strong>HTTP强制传输安全服务</strong>（HTTP Strict Transport Security，HSTS）哦。请参考：https://baike.baidu.com/item/HSTS/8665782</p>
+<hr />
+<p>后来我发现原来 http://mozilla.com.cn 根本就不是Mozilla Firefox官方的社区，完全就是冒牌货。Mozilla Firefox社区请认准： https://www.mozilla.org 。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://baike.baidu.com/item/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AE</li>
+<li>https://blog.futrime.com/freetalk/186.html</li>
+<li>https://addons.mozilla.org/zh-CN/firefox/addon/https-everywhere/</li>
+<li>https://addons.mozilla.org/zh-CN/firefox/addon/smart-https-revived/</li>
+<li>https://developer.mozilla.org</li>
+<li>
+<p>https://baike.baidu.com/item/HSTS/8665782</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-02-23-什么是https降级攻击-遇到了怎么办/"><span class="mono">← Newer</span>什么是HTTPS降级攻击？遇到了怎么办？</a><a class="next" href="/blog/2020-02-13-以后还是周更吧/"><span class="mono">Older →</span>以后还是周更吧</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

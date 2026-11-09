@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docker的安装配置 · Zijian Zhang</title>
+<meta name="description" content="作为容器虚拟化技术的翘楚，Docker颇受各行各业的人士喜爱。一方面它可以省去各个环境之间互相污染的麻烦，又可以得到比虚拟机高得多的效率，两全其美。在这篇博客中我将简单介绍Docker的安装配置、基本使用方法以及当Docker容器很多的时候非常重要的一步：资源分配。">
+<meta property="og:title" content="Docker的安装配置 · Zijian Zhang">
+<meta property="og:description" content="作为容器虚拟化技术的翘楚，Docker颇受各行各业的人士喜爱。一方面它可以省去各个环境之间互相污染的麻烦，又可以得到比虚拟机高得多的效率，两全其美。在这篇博客中我将简单介绍Docker的安装配置、基本使用方法以及当Docker容器很多的时候非常重要的一步：资源分配。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-05-07-docker的安装配置/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.05.07 · 中文</div>
+      <h1>Docker的安装配置</h1>
+      <p class="lede">作为容器虚拟化技术的翘楚，Docker颇受各行各业的人士喜爱。一方面它可以省去各个环境之间互相污染的麻烦，又可以得到比虚拟机高得多的效率，两全其美。在这篇博客中我将简单介绍Docker的安装配置、基本使用方法以及当Docker容器很多的时候非常重要的一步：资源分配。</p>
+      <div class="tags"><span class="chip">Docker</span><span class="chip">安装</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/b3855c6bdc51.png" alt=""></figure>
+    <div class="prose zh">
+<p>要学会Docker，最简单的方法就是看文档：<a href="https://docs.docker.com/" target="_blank" rel="noopener">Docker Documentation</a> ，但是全英文的文档对于中文环境下的用户并不友好，而当前很多国内的教程都旧了，不能跟上Docker版本迭代的步伐。在这里我姑且充当翻译，把文档和自己的理解略作结合作个总结。</p>
+<h2 id="_1">安装配置</h2>
+<h3 id="windowsmac">Windows/Mac</h3>
+<p>在Windows或Mac下安装Docker十分方便，直接前往 <a href="https://www.docker.com/get-started" target="_blank" rel="noopener">Get Started with Docker</a> 下载Docker Desktop，按照提示步骤安装即可。</p>
+<h3 id="ubuntu">Ubuntu</h3>
+<p>首先卸载旧版本（如果有）：</p>
+<div class="hl"><pre><span></span><code>sudo apt-get remove docker docker-engine docker.io containerd runc
+</code></pre></div>
+
+<p>然后安装一些必要前置组件：</p>
+<div class="hl"><pre><span></span><code>sudo apt-get update &amp;&amp; sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+</code></pre></div>
+
+<p>添加Docker CE下载仓库（使用官方源）：</p>
+<div class="hl"><pre><span></span><code>curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo apt-key fingerprint 0EBFCD88
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+</code></pre></div>
+
+<p>上面的<code>[arch=amd64]</code>应根据自己的平台选择，可为：32位ARM<code>armhf</code>，64位ARM<code>arm64</code>，IBM Power<code>ppc64el</code>，IBM Z<code>s390x</code>。</p>
+<p>官方源在中国大陆访问质量可能不佳，此时可以更换为阿里云镜像源等，此处以阿里云镜像源为例。</p>
+<p>添加Docker CE下载仓库（使用阿里云镜像源）：</p>
+<div class="hl"><pre><span></span><code>curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+</code></pre></div>
+
+<p>上面的<code>[arch=amd64]</code>应根据自己的平台选择，可为：32位ARM<code>armhf</code>，64位ARM<code>arm64</code>，IBM Power<code>ppc64el</code>，IBM Z<code>s390x</code>。</p>
+<p>然后就可以安装Docker CE啦：</p>
+<div class="hl"><pre><span></span><code>sudo apt-get update -y
+sudo apt-get install docker-ce -y
+</code></pre></div>
+
+<p>按照Docker官方文档，还需要安装<code>docker-ce-cli</code>和<code>containered.io</code>，但是阿里云镜像源文档没有提示，可能是新版Docker特性（存疑）：</p>
+<div class="hl"><pre><span></span><code>sudo apt-get install docker-ce-cli containerd.io -y
+</code></pre></div>
+
+<h3 id="centos">CentOS</h3>
+<p>Docker在CentOS上的安装似乎比Ubuntu方便许多。</p>
+<p>首先卸载旧版本（如果有）：</p>
+<div class="hl"><pre><span></span><code>sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+</code></pre></div>
+
+<p>安装前置组件：</p>
+<div class="hl"><pre><span></span><code>sudo yum install -y yum-utils
+</code></pre></div>
+
+<p>阿里云镜像源文档还给了更多前置组件（此处存疑）：</p>
+<div class="hl"><pre><span></span><code>sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+</code></pre></div>
+
+<p>添加Docker CE下载仓库（使用官方源）：</p>
+<div class="hl"><pre><span></span><code>sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+</code></pre></div>
+
+<p>官方源在中国大陆访问质量可能不佳，此时可以更换为阿里云镜像源等，此处以阿里云镜像源为例。</p>
+<p>添加Docker CE下载仓库（使用阿里云镜像源）：</p>
+<div class="hl"><pre><span></span><code>sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</code></pre></div>
+
+<p>然后就可以安装Docker CE啦：</p>
+<div class="hl"><pre><span></span><code>sudo yum install docker-ce
+</code></pre></div>
+
+<p>按照Docker官方文档，还需要安装<code>docker-ce-cli</code>和<code>containered.io</code>，但是阿里云镜像源文档没有提示，可能是新版Docker特性（存疑）：</p>
+<div class="hl"><pre><span></span><code>sudo yum install docker-ce-cli containerd.io
+</code></pre></div>
+
+<h3 id="debian">Debian</h3>
+<p>Debian和Ubuntu很相似，似乎只有软件源不一样，毕竟本是同根生。</p>
+<p>首先卸载旧版本（如果有）：</p>
+<div class="hl"><pre><span></span><code>sudo apt-get remove docker docker-engine docker.io containerd runc
+</code></pre></div>
+
+<p>然后安装一些必要前置组件：</p>
+<div class="hl"><pre><span></span><code>sudo apt-get update &amp;&amp; sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+</code></pre></div>
+
+<p>添加Docker CE下载仓库（使用官方源）：</p>
+<div class="hl"><pre><span></span><code>curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+sudo apt-key fingerprint 0EBFCD88
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/debian \
+   $(lsb_release -cs) \
+   stable"
+</code></pre></div>
+
+<p>上面的<code>[arch=amd64]</code>应根据自己的平台选择，可为：32位ARM<code>armhf</code>，64位ARM<code>arm64</code>，IBM Power<code>ppc64el</code>，IBM Z<code>s390x</code>。</p>
+<p>官方源在中国大陆访问质量可能不佳，此时可以更换为阿里云镜像源等，此处以阿里云镜像源为例。</p>
+<p>添加Docker CE下载仓库（使用阿里云镜像源）：</p>
+<div class="hl"><pre><span></span><code>curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/debian/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/debian $(lsb_release -cs) stable"
+</code></pre></div>
+
+<p>上面的<code>[arch=amd64]</code>应根据自己的平台选择，可为：32位ARM<code>armhf</code>，64位ARM<code>arm64</code>，IBM Power<code>ppc64el</code>，IBM Z<code>s390x</code>。</p>
+<p>然后就可以安装Docker CE啦：</p>
+<div class="hl"><pre><span></span><code>sudo apt-get update -y
+sudo apt-get install docker-ce -y
+</code></pre></div>
+
+<p>按照Docker官方文档，还需要安装<code>docker-ce-cli</code>和<code>containered.io</code>，但是阿里云镜像源文档没有提示，可能是新版Docker特性（存疑）：</p>
+<div class="hl"><pre><span></span><code>sudo apt-get install docker-ce-cli containerd.io -y
+</code></pre></div>
+
+<h2 id="docker-hub">使用Docker Hub镜像</h2>
+<p>在中国大陆访问Docker Hub官方源的连接质量十分堪忧，甚至快到完全不能用的地步，此时使用Docker Hub镜像显得尤为重要。以下以腾讯云Docker Hub加速器为例。</p>
+<h3 id="mac">Mac</h3>
+<p>我没有Mac，没办法详细演示，但是和Windows基本一致（都是Docker Desktop），请参考Windows部分。</p>
+<h3 id="windows">Windows</h3>
+<p>先运行Docker Desktop，然后右击右下角托盘栏中的Docker Desktop图标，点击Settings：</p>
+<p><img loading="lazy" alt="批注 2020-04-26 181034.jpg" src="/blog/img/deefb462724d.jpg" /></p>
+<p>切换到Docker Engine选项卡,在右栏的<code>"registry-mirrors": []</code>中输入<code>"https://mirror.ccs.tencentyun.com"</code>,如图：</p>
+<p><img loading="lazy" alt="批注 2020-04-26 181320.jpg" src="/blog/img/401e87887d98.jpg" /></p>
+<p>点击 Apply &amp; Restart 然后静待Docker Desktop重启即可（要几分钟）。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://docs.docker.com/</li>
+<li>https://www.docker.com/get-started</li>
+<li>https://developer.aliyun.com/mirror/docker-ce</li>
+<li>
+<p>https://cloud.tencent.com/document/product/457/9113</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-05-08-发现网易版我的世界的一个奇怪的bug/"><span class="mono">← Newer</span>发现网易版我的世界的一个奇怪的Bug</a><a class="next" href="/blog/2020-05-06-聊聊国际化和本地化/"><span class="mono">Older →</span>聊聊国际化和本地化</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

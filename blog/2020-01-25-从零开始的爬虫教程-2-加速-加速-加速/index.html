@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>从零开始的爬虫教程（2）——加速！加速！加速！ · Zijian Zhang</title>
+<meta name="description" content="从零开始的爬虫教程（2）——加速！加速！加速！">
+<meta property="og:title" content="从零开始的爬虫教程（2）——加速！加速！加速！ · Zijian Zhang">
+<meta property="og:description" content="从零开始的爬虫教程（2）——加速！加速！加速！">
+<link rel="canonical" href="https://zjzh.me/blog/2020-01-25-从零开始的爬虫教程-2-加速-加速-加速/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--gold)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.01.25 · 中文</div>
+      <h1>从零开始的爬虫教程（2）——加速！加速！加速！</h1>
+      
+      <div class="tags"><span class="chip">爬虫</span><span class="chip">urllib</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/3c9aaef5951e.jpg" alt=""></figure>
+    <div class="prose zh">
+<p>在上一篇教程 <em>从零开始的爬虫教程（1）——从urllib开始</em> 中我简单地介绍了Python中使用urllib获取的方法，并介绍了根据已有链接列表批量获取网页的方法。但是在实际爬取TechPowerUp数据库的过程中，常常由于网络质量不佳，每次获取都需要大量的无效等待时间。在这篇教程中，我将会讲讲加速爬取的方法。注意，这篇文章<strong>不适用于Windows</strong>。我将会在不久后特别写一篇在Windows下加速爬取的方法。</p>
+<p>寒假作业做完了怎么办？那当然是刷五(bī)三(zhān)啦。Python也一样。当他在等待一个请求的答复时，我们可以把这些多余的算力和带宽用在其他请求上。因此，我们需要一个十分强大的机制——多线程。</p>
+<p>Python提供了一个简单易用的多线程方法<code>os.fork()</code>，但是这个方法仅仅在Unix家族系统上可用。<strong>因此这篇文章仅仅适用于Unix家族系统</strong>，它包括<a href="https://futrime.gitee.io/image-cdn/2020/01/590966106.txt" target="_blank" rel="noopener">Linux系统</a>，BSD系列系统，macOS以及Android，它<strong>不适用于Windows</strong>。我们只需要在主程序开始之前执行如下代码：</p>
+<div class="hl"><pre><span></span><code>os.fork()
+</code></pre></div>
+
+<p>主程序就自动分为两个了。但是仅有如此还不够，我们需要的并不是每个线程执行相同的程序，而是要它们分工协作爬取数据库。<code>os.fork()</code>方法执行时会返回一个索引号，这个索引号在子线程是0，在父线程是子线程对应的PID。因此我们得到如下获取线程序号的代码：
+    pid = 0
+    for i in range(forks):
+        ret = os.fork()
+        if ret == 0:
+            break
+        pid += 1
+        if pid &gt;= forks: exit()</p>
+<div class="hl"><pre><span></span><code>print('Worker #' + str(pid) + ' is ready.')
+</code></pre></div>
+
+<p>其中forks是我们需要的线程数，pid是线程代号(注意这里不是Linux进程管理中的PID）。由此，我们可以得到<a href="https://futrime.gitee.io/image-cdn/2020/01/2904089748.zip" target="_blank" rel="noopener">完整的多线程爬取程序</a>。输入<code>python3 1.py</code>执行后结果如下图所示：</p>
+<p><img loading="lazy" alt="1.png" src="/blog/img/657ed92d710a.png" /></p>
+<p>可以看到，程序同时放出了多个连接。这样子爬取速度简直就是成倍的提升啊。根据我自己的测试，在阿里云ECS上可以跑100-200个线程，在我自己的笔记本电脑上（Intel® Core™ i7-8750H 和 16G内存）上可以开到3000个线程。整个<code>GPU_links.txt</code>文件里面只有千来条链接，如果网络没问题的话就可以在一分钟内完成了。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://docs.python.org/3/library/os.html</li>
+<li>https://docs.python.org/3/library/urllib.html</li>
+<li>https://www.techpowerup.com</li>
+<li>
+<p>https://en.wikipedia.org/wiki/List_of_Linux_distributions</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-01-26-从零开始的爬虫教程-3-合法爬虫-一点不怂/"><span class="mono">← Newer</span>从零开始的爬虫教程（3）——合法爬虫，一点不怂</a><a class="next" href="/blog/2020-01-24-从零开始的爬虫教程-1-从urllib开始/"><span class="mono">Older →</span>从零开始的爬虫教程（1）——从urllib开始</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

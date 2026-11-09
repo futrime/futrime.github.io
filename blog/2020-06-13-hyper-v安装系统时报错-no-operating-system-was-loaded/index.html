@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyper-V安装系统时报错 No operating system was loaded · Zijian Zhang</title>
+<meta name="description" content="最近玩Docker Desktop，要求使用Hyper-V作为后端，而Hyper-V和VMWare Workstation Player或VirtualBox不兼容，只能卸载这些顺手的虚拟机软件，尝试上手Hyper-V。在使安装系统时遇到“No operating system was loaded”的报错，特此记录。">
+<meta property="og:title" content="Hyper-V安装系统时报错 No operating system was loaded · Zijian Zhang">
+<meta property="og:description" content="最近玩Docker Desktop，要求使用Hyper-V作为后端，而Hyper-V和VMWare Workstation Player或VirtualBox不兼容，只能卸载这些顺手的虚拟机软件，尝试上手Hyper-V。在使安装系统时遇到“No operating system was loaded”的报错，特此记录。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-06-13-hyper-v安装系统时报错-no-operating-system-was-loaded/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--teal)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.06.13 · 中文</div>
+      <h1>Hyper-V安装系统时报错 No operating system was loaded</h1>
+      <p class="lede">最近玩Docker Desktop，要求使用Hyper-V作为后端，而Hyper-V和VMWare Workstation Player或VirtualBox不兼容，只能卸载这些顺手的虚拟机软件，尝试上手Hyper-V。在使安装系统时遇到“No operating system was loaded”的报错，特此记录。</p>
+      <div class="tags"><span class="chip">操作系统</span><span class="chip">Hyper-V</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/a05d709db273.png" alt=""></figure>
+    <div class="prose zh">
+<p>我直接使用快速创建建立了虚拟机，选择使用ISO启动，发现提示如下界面：</p>
+<p><img loading="lazy" alt="无标题.png" src="/blog/img/6df4fdbf2e43.png" /></p>
+<p>点击Restart也没反应，不得不说Hyper-V对于鼠标的支持真的是玄学。</p>
+<p>（顺便一提，之前在Hyper-V上安装Phoenix OS也是用不了鼠标）</p>
+<p>捣鼓了好一阵子发现，其实是在出现如下画面的时候，要快速地按任意键：</p>
+<p><img loading="lazy" alt="无标题.png" src="/blog/img/121ef76ca16d.png" /></p>
+<p>这个画面出现的时间很短（1s不到），所以要保持留意。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-06-14-docker报错-standard-init-linux-go-207-exec-user-process-caused-exec-format-error/"><span class="mono">← Newer</span>Docker报错 standard_init_linux.go:207: exec user process caused exec format error</a><a class="next" href="/blog/2020-06-07-windows-server-iso镜像下载地址/"><span class="mono">Older →</span>Windows Server ISO镜像下载地址</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

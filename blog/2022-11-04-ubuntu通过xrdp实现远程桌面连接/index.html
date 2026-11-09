@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ubuntu通过xrdp实现远程桌面连接 · Zijian Zhang</title>
+<meta name="description" content="对于Windows用户来说，这比VNC方便多了">
+<meta property="og:title" content="Ubuntu通过xrdp实现远程桌面连接 · Zijian Zhang">
+<meta property="og:description" content="对于Windows用户来说，这比VNC方便多了">
+<link rel="canonical" href="https://zjzh.me/blog/2022-11-04-ubuntu通过xrdp实现远程桌面连接/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2022.11.04 · 中文</div>
+      <h1>Ubuntu通过xrdp实现远程桌面连接</h1>
+      <p class="lede">对于Windows用户来说，这比VNC方便多了</p>
+      <div class="tags"><span class="chip">远程桌面连接</span><span class="chip">Ubuntu</span><span class="chip">xrdp</span><span class="chip">蓝屏</span><span class="chip">黑屏</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/ce20cd701942.png" alt=""></figure>
+    <div class="prose zh">
+<p>首先需要确保Ubuntu已经安装了桌面环境。</p>
+<p>输入以下命令安装xrdp：</p>
+<div class="hl"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>xrdp<span class="w"> </span>-y
+</code></pre></div>
+
+<p>可能需要开放3389端口。</p>
+<p>最后是一个比较大的坑：在远程登录前，必须将本地登陆的桌面环境用户登出，否则远程桌面会蓝屏或黑屏。xrdp和Windows不同，不会自动将已经登陆的用户注销。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2022-11-13-debian永久禁用swap/"><span class="mono">← Newer</span>Debian永久禁用Swap</a><a class="next" href="/blog/2022-11-03-cheatsheet是如何炼成的/"><span class="mono">Older →</span>Cheatsheet是如何炼成的</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

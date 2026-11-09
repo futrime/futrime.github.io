@@ -16,7 +16,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@500;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Hyacine palette: sky, blossom, lilac, sun-gold over cloud white */
+  /* Hyacine palette: teal hair, blossom pink, sky, lilac, sun-gold over cloud white */
+  --teal:#3fbfb5; --teal-soft:#d2f1ee;
   --sky:#5fb4e0; --sky-soft:#cfe9f6;
   --pink:#ef8fb3; --pink-soft:#fbe0ea;
   --lilac:#a493de; --gold:#e6b85c;
@@ -27,6 +28,7 @@
 }
 @media (prefers-color-scheme:dark){
   :root{
+    --teal:#6fd8cf; --teal-soft:#173b3a;
     --sky:#79c3ea; --sky-soft:#1c3346;
     --pink:#f39fbf; --pink-soft:#3a2333;
     --lilac:#b3a5ea; --gold:#ecc672;
@@ -49,7 +51,7 @@ a{color:inherit;text-decoration:none}
 .bar nav a::after{content:"";position:absolute;left:0;right:100%;bottom:-3px;height:3px;background:var(--pink);transition:right .25s}
 .bar nav a:hover::after{right:0}
 .logo{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.02em}
-.logo i{width:14px;height:14px;background:var(--sky);display:inline-block;transform:rotate(45deg)}
+.logo i{width:14px;height:14px;background:linear-gradient(135deg,var(--teal),var(--pink));display:inline-block;transform:rotate(45deg)}
 
 /* ---------- hero ---------- */
 .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;padding:56px 0 48px;position:relative;align-items:center}
@@ -57,7 +59,7 @@ a{color:inherit;text-decoration:none}
 .kicker b{display:inline-block;width:42px;height:6px;background:var(--pink)}
 h1{font-weight:900;font-stretch:118%;font-size:clamp(56px,9.4vw,124px);line-height:.86;letter-spacing:-.035em;text-transform:uppercase}
 h1 .l2{display:block;padding-left:.42em;position:relative}
-h1 .l2::before{content:"";position:absolute;left:0;top:.18em;width:.28em;height:.62em;background:var(--sky)}
+h1 .l2::before{content:"";position:absolute;left:0;top:.18em;width:.28em;height:.62em;background:linear-gradient(180deg,var(--teal),var(--pink))}
 .cn{font-family:"Noto Sans SC",sans-serif;font-weight:900;font-size:clamp(20px,2.4vw,28px);letter-spacing:.3em;margin:22px 0 0;display:flex;align-items:center;gap:14px}
 .cn::after{content:"";flex:0 0 80px;height:2px;background:var(--ink)}
 .lede{max-width:560px;margin-top:26px;font-size:18px;color:var(--ink-2)}
@@ -66,7 +68,7 @@ h1 .l2::before{content:"";position:absolute;left:0;top:.18em;width:.28em;height:
 .links a{border:2px solid var(--ink);padding:9px 14px 8px;display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:13px;letter-spacing:.04em;transition:transform .15s, box-shadow .15s;background:var(--paper)}
 .links a:hover{transform:translate(-3px,-3px);box-shadow:3px 3px 0 var(--pink)}
 .links a.primary{background:var(--ink);color:var(--bg)}
-.links a.primary:hover{box-shadow:3px 3px 0 var(--sky)}
+.links a.primary:hover{box-shadow:3px 3px 0 var(--teal)}
 
 .comp{position:relative;width:100%;aspect-ratio:1/1;max-width:440px;justify-self:end}
 .comp svg{width:100%;height:100%;display:block;overflow:visible}
@@ -82,7 +84,7 @@ section.block{display:grid;grid-template-columns:240px 1fr;gap:32px;padding:44px
 .about p+p{margin-top:14px}
 .about .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
 .about .tags span{font-family:var(--mono);font-size:12px;padding:5px 10px;border:1.5px solid var(--ink)}
-.about .tags span:nth-child(4n+1){background:var(--sky-soft)}
+.about .tags span:nth-child(4n+1){background:var(--teal-soft)}
 .about .tags span:nth-child(4n+2){background:var(--pink-soft)}
 
 ol.rows{list-style:none}
@@ -93,8 +95,8 @@ ol.rows li:last-child{border-bottom:none}
 .what b{font-weight:800}
 .what .sub{color:var(--ink-2);font-size:15px}
 .what .place{font-family:var(--mono);font-size:12px;color:var(--ink-2);margin-left:6px;letter-spacing:.04em}
-.news .what a{border-bottom:2px solid var(--sky)}
-.news .what a:hover{background:var(--sky-soft)}
+.news .what a{border-bottom:2px solid var(--teal)}
+.news .what a:hover{background:var(--teal-soft)}
 
 /* publications */
 .pubs{list-style:none;counter-reset:p}
@@ -165,6 +167,7 @@ footer .stripes i{flex:1}
       <a href="#publications">Publications</a>
       <a href="#projects">Projects</a>
       <a href="#experience">Experience</a>
+      <a href="/blog/">Blog</a>
     </nav>
   </header>
 
@@ -180,6 +183,7 @@ footer .stripes i{flex:1}
         <a href="https://scholar.google.com/citations?user=TyZxrvsAAAAJ" target="_blank" rel="noopener">Google Scholar ↗</a>
         <a href="https://github.com/futrime" target="_blank" rel="noopener">GitHub ↗</a>
         <a href="https://humanfia.ai" target="_blank" rel="noopener">Humanfia ↗</a>
+        <a href="/blog/">Blog →</a>
       </div>
     </div>
 
@@ -188,6 +192,7 @@ footer .stripes i{flex:1}
       <svg viewBox="0 0 600 600">
         <g class="spin">
           <!-- rainbow arc -->
+          <path d="M94 300 a206 206 0 0 1 412 0" fill="none" stroke="var(--teal)" stroke-width="16"/>
           <path d="M120 300 a180 180 0 0 1 360 0" fill="none" stroke="var(--pink)" stroke-width="16"/>
           <path d="M146 300 a154 154 0 0 1 308 0" fill="none" stroke="var(--gold)" stroke-width="16"/>
           <path d="M172 300 a128 128 0 0 1 256 0" fill="none" stroke="var(--sky)" stroke-width="16"/>
@@ -207,7 +212,7 @@ footer .stripes i{flex:1}
 
   <!-- ===================== ABOUT ===================== -->
   <section class="block about" id="about">
-    <div class="label"><span class="num">01</span><h2>About</h2><span class="tick" style="background:var(--sky)"></span></div>
+    <div class="label"><span class="num">01</span><h2>About</h2><span class="tick" style="background:var(--teal)"></span></div>
     <div>
       <p>I am a Ph.D. student in Computer Science at the <b>College of AI, Tsinghua University</b>, and a research intern at <b>NVIDIA</b> in Singapore. Before that I received my B.Eng. in Automation from Tsinghua University.</p>
       <p>My work centres on <b>agent flows</b>: the loops, reviewers and runtimes that organise coding agents for long-horizon tasks, from software engineering and machine-learning engineering to olympiad mathematics and formal proofs. I also work on LLM reasoning and efficient inference, and have long been building open-source developer tools.</p>
@@ -270,7 +275,7 @@ footer .stripes i{flex:1}
   <section class="block" id="projects">
     <div class="label"><span class="num">04</span><h2>Projects</h2><span class="tick" style="background:var(--lilac)"></span></div>
     <div class="proj">
-      <a href="https://github.com/humanfia/humanize" target="_blank" rel="noopener" style="--c:var(--sky)">
+      <a href="https://github.com/humanfia/humanize" target="_blank" rel="noopener" style="--c:var(--teal)">
         <div class="role">Project lead</div>
         <h3>Humanize</h3>
         <p>The agent flow system that runs Claude Code, Codex and other coding agents in loops until the task is done.</p>
@@ -307,7 +312,7 @@ footer .stripes i{flex:1}
 
   <!-- ===================== EDUCATION ===================== -->
   <section class="block" id="education">
-    <div class="label"><span class="num">06</span><h2>Education</h2><span class="tick" style="background:var(--pink)"></span></div>
+    <div class="label"><span class="num">06</span><h2>Education</h2><span class="tick" style="background:var(--teal)"></span></div>
     <ol class="rows">
       <li><span class="when">2025 – now</span><span class="what"><b>Tsinghua University</b> · Ph.D. in Computer Science<div class="sub">College of AI</div></span></li>
       <li><span class="when">2021 – 2025</span><span class="what"><b>Tsinghua University</b> · B.Eng. in Automation<div class="sub">Department of Automation</div></span></li>
@@ -329,7 +334,7 @@ footer .stripes i{flex:1}
 
   <footer class="mono">
     <span>© 2026 Zijian Zhang · zjzh.me</span>
-    <span class="stripes" aria-hidden="true"><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
   </footer>
 </div>
 </body>

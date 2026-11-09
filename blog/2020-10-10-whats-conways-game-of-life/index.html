@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What&#x27;s Conway&#x27;s Game of Life · Zijian Zhang</title>
+<meta name="description" content="These days I was addicted to a new type of &quot;game&quot;, Conway&#x27;s Game of Life. And I&#x27;ve written a webpage of it.">
+<meta property="og:title" content="What&#x27;s Conway&#x27;s Game of Life · Zijian Zhang">
+<meta property="og:description" content="These days I was addicted to a new type of &quot;game&quot;, Conway&#x27;s Game of Life. And I&#x27;ve written a webpage of it.">
+<link rel="canonical" href="https://zjzh.me/blog/2020-10-10-whats-conways-game-of-life/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--pink)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.10.10 · English</div>
+      <h1>What&#x27;s Conway&#x27;s Game of Life</h1>
+      <p class="lede">These days I was addicted to a new type of &quot;game&quot;, Conway&#x27;s Game of Life. And I&#x27;ve written a webpage of it.</p>
+      <div class="tags"><span class="chip">Game of Life</span><span class="chip">Conway</span></div>
+    </header>
+    
+    <div class="prose">
+<h2 id="my-project">My Project</h2>
+<p>The project is now available on Gitee, a GitHub alternative in China, which also provides Pages service that I put the program on it. If interested, you can fork it and make any contribution to it. However, due to some problems, now the project can only be maintained in Chinese. The project is on <a href="https://github.com/futrime/Game-of-Life" target="_blank" rel="noopener">Futrime/Game-of-Life</a>. If only want to experience the game, please access <a href="https://futrime.github.io/Game-of-Life/" target="_blank" rel="noopener">DEMO</a>.</p>
+<p>The program is purely written in HTML and Javascript, but also use <a href="https://github.com/dataarts/dat.gui" target="_blank" rel="noopener">dat.GUI</a></p>
+<p>Here is the introduction adapted from <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank" rel="noopener">Wikipedia</a>.</p>
+<h2 id="introduction">Introduction</h2>
+<p>The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970.[1] It is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves. It is Turing complete and can simulate a universal constructor or any other Turing machine.</p>
+<h2 id="rules">Rules</h2>
+<p>The universe of the Game of Life is an infinite, two-dimensional orthogonal grid of square cells, each of which is in one of two possible states, live or dead, (or populated and unpopulated, respectively). Every cell interacts with its eight neighbours, which are the cells that are horizontally, vertically, or diagonally adjacent. At each step in time, the following transitions occur:</p>
+<ol>
+<li>Any live cell with fewer than two live neighbours dies, as if by underpopulation.</li>
+<li>Any live cell with two or three live neighbours lives on to the next generation.</li>
+<li>Any live cell with more than three live neighbours dies, as if by overpopulation.</li>
+<li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
+</ol>
+<p>These rules, which compare the behavior of the automaton to real life, can be condensed into the following:</p>
+<ol>
+<li>Any live cell with two or three live neighbours survives.</li>
+<li>Any dead cell with three live neighbours becomes a live cell.</li>
+<li>All other live cells die in the next generation. Similarly, all other dead cells stay dead.</li>
+</ol>
+<p>The initial pattern constitutes the seed of the system. The first generation is created by applying the above rules simultaneously to every cell in the seed; births and deaths occur simultaneously, and the discrete moment at which this happens is sometimes called a tick. Each generation is a pure function of the preceding one. The rules continue to be applied repeatedly to create further generations.</p>
+<p>References:</p>
+<ol>
+<li>https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life</li>
+<li>https://futrime.gitee.io/game-of-life/</li>
+<li>https://gitee.com/futrime/game-of-life</li>
+<li>https://github.com/dataarts/dat.gui</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-11-02-利用cloudflare-worker加速下载github-releases/"><span class="mono">← Newer</span>利用Cloudflare Worker加速下载GitHub Releases</a><a class="next" href="/blog/2020-10-09-python-web-server-from-scratch/"><span class="mono">Older →</span>Python Web Server from Scratch</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

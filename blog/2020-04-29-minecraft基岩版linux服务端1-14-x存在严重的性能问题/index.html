@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minecraft基岩版Linux服务端1.14.X存在严重的性能问题 · Zijian Zhang</title>
+<meta name="description" content="Minecraft基岩版Linux服务端1.14.X存在严重的性能问题">
+<meta property="og:title" content="Minecraft基岩版Linux服务端1.14.X存在严重的性能问题 · Zijian Zhang">
+<meta property="og:description" content="Minecraft基岩版Linux服务端1.14.X存在严重的性能问题">
+<link rel="canonical" href="https://zjzh.me/blog/2020-04-29-minecraft基岩版linux服务端1-14-x存在严重的性能问题/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--sky)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.04.29 · 中文</div>
+      <h1>Minecraft基岩版Linux服务端1.14.X存在严重的性能问题</h1>
+      
+      <div class="tags"><span class="chip">Minecraft</span><span class="chip">服务器</span><span class="chip">Bug</span><span class="chip">性能</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/156d2e4bb7d7.jpg" alt=""></figure>
+    <div class="prose zh">
+<p>最近在独自搭建的服务器上玩的时候发现总是会卡顿，骑马的时候两步一卡，毫无游戏体验。我使用的服务器是阿里云的ECS（Intel® Xeon® E5-2682v4单核心+1GB RAM），按理说这个性能已经足够了。</p>
+<p>于是我就尝试在自己的电脑（Intel® Core™ i7-8750H + 32GB RAM + Samsung® SSD 970 EVO PLUS）上用虚拟机开，分配了4C8T加上16G内存，发现依然很卡。</p>
+<p>于是我使用TOP命令查看占用，发现只要有玩家连接，CPU0的占用就达到了100%而其他线程都懒得动。</p>
+<p>后来我在<a href="https://bugs.mojang.com" target="_blank" rel="noopener">Jira</a>上找到了一个Bug：<a href="https://bugs.mojang.com/browse/BDS-2574" target="_blank" rel="noopener">BDS-2574</a>，在1.14.X版本的Linux基岩版服务端存在严重的性能问题，目前唯一解决办法就是换成Windows（会不会是Microsoft的阴谋呢/误）。但是毕竟Linux还是更适合作为服务端，希望改进吧。</p>
+<p>社区中提到1.14.60版有所改善，根据我的测试，如果把在以前版本的世界导入反而会更加糟糕，而直接用1.14.60创建则有一点点好转，但只是一点点。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://bugs.mojang.com</li>
+<li>https://bugs.mojang.com/browse/BDS-2574</li>
+<li>
+<p>https://blog.futrime.com/hacking/302.html</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-04-29-利用cloudflare-workers加速下载海外服务器的文件/"><span class="mono">← Newer</span>利用Cloudflare Workers加速下载海外服务器的文件</a><a class="next" href="/blog/2020-04-26-从火狐浏览器开始谈谈各类软件的中国版/"><span class="mono">Older →</span>从火狐浏览器开始谈谈各类软件的中国版</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

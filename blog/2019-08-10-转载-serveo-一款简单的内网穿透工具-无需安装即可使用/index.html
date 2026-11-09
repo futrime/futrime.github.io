@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serveo：一款简单的内网穿透工具，无需安装即可使用 · Zijian Zhang</title>
+<meta name="description" content="Serveo是一个SSH服务器，仅用于远程端口转发，可以快速将本地端口暴露在外网。官方声称其为Ngrok的绝佳替代品，对其优点是使用现有的SSH客户端，无需安装客户端即可完成端口转发。当用户连接到Serveo时，他们会获得一个公共URL，任何人都可以使用它来连接到他们的localhost服务器。">
+<meta property="og:title" content="Serveo：一款简单的内网穿透工具，无需安装即可使用 · Zijian Zhang">
+<meta property="og:description" content="Serveo是一个SSH服务器，仅用于远程端口转发，可以快速将本地端口暴露在外网。官方声称其为Ngrok的绝佳替代品，对其优点是使用现有的SSH客户端，无需安装客户端即可完成端口转发。当用户连接到Serveo时，他们会获得一个公共URL，任何人都可以使用它来连接到他们的localhost服务器。">
+<link rel="canonical" href="https://zjzh.me/blog/2019-08-10-转载-serveo-一款简单的内网穿透工具-无需安装即可使用/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--gold)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2019.08.10 · 中文</div>
+      <h1>Serveo：一款简单的内网穿透工具，无需安装即可使用</h1>
+      <p class="lede">Serveo是一个SSH服务器，仅用于远程端口转发，可以快速将本地端口暴露在外网。官方声称其为Ngrok的绝佳替代品，对其优点是使用现有的SSH客户端，无需安装客户端即可完成端口转发。当用户连接到Serveo时，他们会获得一个公共URL，任何人都可以使用它来连接到他们的localhost服务器。</p>
+      <div class="tags"><span class="chip">转载</span><span class="chip">内网穿透</span><span class="chip">SSH</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/3518e8f64c1d.jpg" alt=""></figure>
+    <div class="prose zh">
+<p>服务器是国外的，国内延迟有点高</p>
+<p>官方地址：<a href="http://serveo.net" target="_blank" rel="noopener">serveo.net</a></p>
+<p>使用要求：可以使用SSH，并且能连接到互联网，Linux、Windows等系统都行。</p>
+<p>1、转发HTTP
+将本地3000端口穿透到公网中，使用命令：</p>
+<h1 id="_1">要转发其它端口的自行替换</h1>
+<div class="hl"><pre><span></span><code>ssh -R 80:localhost:3000 serveo.net
+</code></pre></div>
+
+<p>第一次如果有提示，选择yes即可，之后会为你随机生成一个serveo.net二级域名，然后就可以使用浏览器间接访问本地的localhost:3000了。</p>
+<p>如果要指定二级域名，可以使用命令：</p>
+<h1 id="sunnyserveonet">这里默认为sunny.serveo.net，自行替换即可</h1>
+<div class="hl"><pre><span></span><code>ssh -R sunny:80:localhost:3000 serveo.net
+</code></pre></div>
+
+<p>此时你就可以在外网使用sunny.serveo.net访问你本地的localhost:3000了。</p>
+<p>2、转发SSH
+将本地22端口穿透到公网中，使用命令：</p>
+<h1 id="rats">可以自行设置名称，这里默认rats</h1>
+<div class="hl"><pre><span></span><code>ssh -R sunny:22:localhost:22 serveo.net
+</code></pre></div>
+
+<p>接下来就可以登录该内网服务器了，使用命令：</p>
+<div class="hl"><pre><span></span><code>ssh -J serveo.net root@sunny
+</code></pre></div>
+
+<p>3、转发TCP
+将本地1492端口穿透到公网中，使用命令：</p>
+<h1 id="1492">可以自行设置公网端口，这里默认1492</h1>
+<div class="hl"><pre><span></span><code>ssh -R 1492:localhost:1492 serveo.net
+</code></pre></div>
+
+<p>进程守护
+这里官方推荐使用AutoSSH，作用是一旦SSH连接超时或停止传递流量，则根据需要重新启动它。</p>
+<p>1、安装AutoSSH</p>
+<div class="hl"><pre><span></span><code>#Debian/Ubuntu系统
+apt install autossh -y
+
+#CentOS系统
+yum install autossh -y
+</code></pre></div>
+
+<p>2、使用Systemd</p>
+<div class="hl"><pre><span></span><code>只适用于CentOS 7、Debian 8+、Ubuntu 16+等。
+
+#输入你的转发命令，去掉开头的ssh即可
+serveo="-R 80:localhost:3000 serveo.net"
+#将以下代码一起复制到SSH运行
+cat &gt; /etc/systemd/system/autossh.service &lt;&lt;EOF
+[Unit]
+Description=autossh
+After=network.target
+
+[Service]
+Type=simple
+Environment="AUTOSSH_GATETIME=0"
+ExecStart=$(command -v autossh) -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" $serveo
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
+EOF
+开始启动并设置开机自启：
+
+systemctl start autossh
+systemctl enable autossh
+</code></pre></div>
+
+<p>最后更多的命令和使用可以直接查看官方文档→<a href="http://serveo.net/" target="_blank" rel="noopener">传送门</a>。</p>
+<p>转自<a href="https://www.moerats.com/archives/990/" target="_blank" rel="noopener">moerats</a></p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2019-08-23-记近日windows-10更新的极不愉快体验/"><span class="mono">← Newer</span>记近日Windows 10更新的极不愉快体验</a><a class="next" href="/blog/2019-08-07-英才计划暑期野外考察活动最终总结/"><span class="mono">Older →</span>英才计划暑期野外考察活动最终总结</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

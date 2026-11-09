@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NanoPi NEO上手评测（二）——性能评估 · Zijian Zhang</title>
+<meta name="description" content="NanoPi NEO上手评测（二）——性能评估">
+<meta property="og:title" content="NanoPi NEO上手评测（二）——性能评估 · Zijian Zhang">
+<meta property="og:description" content="NanoPi NEO上手评测（二）——性能评估">
+<link rel="canonical" href="https://zjzh.me/blog/2019-07-28-nanopi-neo上手评测-二-性能评估/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--teal)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2019.07.28 · 中文</div>
+      <h1>NanoPi NEO上手评测（二）——性能评估</h1>
+      
+      <div class="tags"><span class="chip">NanoPi NEO</span><span class="chip">性能</span></div>
+    </header>
+    
+    <div class="prose zh">
+<p>在我上次的博客中，我简洁地介绍了NanoPi NEO并给NanoPi NEO装了系统。今天就进入第二阶段：NanoPi NEO性能评估。话不多说，先SSH连接NanoPi NEO：</p>
+<p><img loading="lazy" alt="登入界面.png" src="/blog/img/6da79ac5cf68.png" /></p>
+<p>首先下载UnixBench：</p>
+<div class="hl"><pre><span></span><code>wget http://175.6.32.4:88/soft/test/unixbench/unixbench-5.1.2.tar.gz
+</code></pre></div>
+
+<p>然后解压</p>
+<div class="hl"><pre><span></span><code>tar -xzvf unixbench-5.1.2.tar.gz
+
+cd unixbench-5.1.2
+</code></pre></div>
+
+<p>显然不需要进行图形测试或者不在图形化界面下测试，将Makefile文件中GRAPHICS_TEST = defined注释掉，我的是在46行。</p>
+<p><img loading="lazy" alt="UnixBench配置.png" src="/blog/img/b638d699aecc.png" /></p>
+<p>还要注意UnixBench需要<img loading="lazy" alt="Perl" src="https://www.perl.org/" />和<a href="https://gcc.gnu.org/" target="_blank" rel="noopener">gcc</a>，FriendlyCore自带了。</p>
+<p>随后执行 <code>make</code> 命令。</p>
+<p><img loading="lazy" alt="UnixBench make.png" src="/blog/img/dfda3ad0169f.png" /></p>
+<p>有一大堆warning，大概是因为软件是2007年开发的，和现在的GCC有些不兼容，但是不影响使用。</p>
+<p>随后运行 <code>./Run</code> ，需要时间比较长（毕竟Cortex-A7），耐心等待一下吧。</p>
+<p><img loading="lazy" alt="UnixBench运行.png" src="/blog/img/6ef9fdca3b52.png" /></p>
+<p>似乎连接断掉了。</p>
+<p><img loading="lazy" alt="连接超时.png" src="/blog/img/fb18cf2634f1.png" /></p>
+<p>看来NanoPi NEO的网络稳定性不够。那就用 <code>nohup</code> 吧。</p>
+<div class="hl"><pre><span></span><code>nohup ./Run
+</code></pre></div>
+
+<p>大概等了半个小时，测试才算是完成了。UnixBench目录下有文件夹results，里面存放着跑分记录，甚至有一个已经编译成HTML的，方便起见，我将其编译成PDF导出：<a href="https://futrime.gitee.io/image-cdn/2019/07/2631931879.pdf" target="_blank" rel="noopener">Benchmark of NanoPi-NEO _ GNU_Linux on Thu Jul 25 2019.pdf</a></p>
+<p><img loading="lazy" alt="Allwinner H3" src="/blog/img/5e502b94f56f.png" /></p>
+<p>对比Intel® Celeron™ J3455的跑分：<a href="https://futrime.gitee.io/image-cdn/2019/07/4246658478.pdf" target="_blank" rel="noopener">PDF</a></p>
+<p><img loading="lazy" alt="J3455单核" src="/blog/img/6a793bbb8229.png" /></p>
+<p>全核心跑分是491分，已经比Intel® Celeron® J3455一个核心高了。据说全核心分数达到500分就是合格的VPS了，看来这台机当VPS也没多大问题。</p>
+<p>再说说发热，NanoPi NEO的发热是真的厉害，虽然有散热片但是完全压不住。跑UnixBench的时候要外接一个风扇才能避免频繁降频，毕竟全志H3是40 nm制程的，也不能要求太多。</p>
+<h1 id="_1">超频</h1>
+<p>超频？做梦吧。</p>
+<p>不过用 <code>cpu_freq -s 1200000</code> 可以把频率锁死在1.2GHz，对比起原来的默频864MHz，up-to 1.08GHz还是有很大性能提升的，当然发热也很大提升了。</p>
+<p>顺带说一下，用 <code>cpu_freq</code> 不仅可以超频，还可以降频，在NanoPi NEO恶劣的散热环境下，如果没有性能追求，可以适当降频，以达到降温提效的作用。</p>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2019-08-07-英才计划暑期野外考察活动最终总结/"><span class="mono">← Newer</span>英才计划暑期野外考察活动最终总结</a><a class="next" href="/blog/2019-07-25-nanopi-neo-上手评测-一-装系统/"><span class="mono">Older →</span>NanoPi NEO 上手评测（一）——装系统</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>

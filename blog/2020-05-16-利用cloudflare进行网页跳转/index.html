@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>利用Cloudflare进行网页跳转 · Zijian Zhang</title>
+<meta name="description" content="有时候我们注册了多个域名，或者一个域名有多个子域名需要应用到同一个网站上，但是我们又不希望过多域名导致搜索引擎权重分散，那么我们就可以通过Cloudflare进行网页跳转。在这篇文章中我将会简单讲讲如何使用Cloudflare进行网页跳转。">
+<meta property="og:title" content="利用Cloudflare进行网页跳转 · Zijian Zhang">
+<meta property="og:description" content="有时候我们注册了多个域名，或者一个域名有多个子域名需要应用到同一个网站上，但是我们又不希望过多域名导致搜索引擎权重分散，那么我们就可以通过Cloudflare进行网页跳转。在这篇文章中我将会简单讲讲如何使用Cloudflare进行网页跳转。">
+<link rel="canonical" href="https://zjzh.me/blog/2020-05-16-利用cloudflare进行网页跳转/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/atom+xml" title="Zijian Zhang · Blog" href="/blog/atom.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog/blog.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="logo" href="/"><i></i>ZJZH.ME</a>
+    <nav class="mono"><a href="/">Home</a><a href="/#publications">Publications</a><a href="/blog/" aria-current="page">Blog</a></nav>
+  </header>
+
+  <article class="post" style="--accent:var(--gold)">
+    <header class="post-head">
+      <div class="kicker mono"><b></b><a href="/blog/">Blog</a> · 2020.05.16 · 中文</div>
+      <h1>利用Cloudflare进行网页跳转</h1>
+      <p class="lede">有时候我们注册了多个域名，或者一个域名有多个子域名需要应用到同一个网站上，但是我们又不希望过多域名导致搜索引擎权重分散，那么我们就可以通过Cloudflare进行网页跳转。在这篇文章中我将会简单讲讲如何使用Cloudflare进行网页跳转。</p>
+      <div class="tags"><span class="chip">Cloudflare</span><span class="chip">域名</span><span class="chip">跳转</span></div>
+    </header>
+    <figure class="cover"><img src="/blog/img/ea3720f6e64d.jpg" alt=""></figure>
+    <div class="prose zh">
+<h2 id="_1">绑定域名</h2>
+<p>首先我们需要注册一个Cloudflare账号。</p>
+<p>拥有Cloudflare账号后，点击右上角的<code>添加站点</code>，输入自己的主域名（注意应当是<code>example.com</code>这样的形式，如果输入了<code>www.example.com</code>的话只能跳转<code>xxx.www.example.com</code>这样的域名了。</p>
+<p>选择第一个Free计划：</p>
+<p><img loading="lazy" alt="批注 2020-04-21 155253.jpg" src="/blog/img/11e8556598bf.jpg" /></p>
+<p>等待自动扫描添加现有DNS记录，不过往往都会无法识别所有记录，所以需要手动添加，注意此时需要跳转的域名就必须要勾选<code>流量经过Cloudflare</code>，而不需要跳转的域名可以不勾选（也就是把橙色云点成灰色云）（本质上就是CDN，但是如果你的服务器本来在国内访问就很快的话建议不勾选）。另外一点，建议需要跳转的域名使用A记录解析到1.1.1.1：</p>
+<p><img loading="lazy" alt="批注 2020-04-21 155453.jpg" src="/blog/img/f12b72572d63.jpg" /></p>
+<p>然后按照提示修改现有NS服务器，这个需要前往域名注册商修改：</p>
+<p><img loading="lazy" alt="批注 2020-04-21 155733.jpg" src="/blog/img/b6eb168d7b7a.jpg" /></p>
+<p>随后点击确认，在新的页面中点击<code>稍后设置</code>。</p>
+<h2 id="_2">设置跳转</h2>
+<p>在域名管理界面中选择<code>Workers</code>，然后选择<code>管理Workers</code>，然后点击<code>创建Worker</code>,进入Worker编辑界面:</p>
+<p><img loading="lazy" alt="批注 2020-04-21 160158.jpg" src="/blog/img/d87c081de854.jpg" /></p>
+<p>在<code>脚本</code>栏中输入如下内容：</p>
+<div class="hl"><pre><span></span><code>async function handleRequest(request) {
+  return Response.redirect(someURLToRedirectTo, code)
+}
+addEventListener('fetch', async event =&gt; {
+  event.respondWith(handleRequest(event.request))
+})
+/**
+ * Example Input
+ * @param {Request} url where to redirect the response
+ * @param {number?=301|302} type permanent or temporary redirect
+ */
+const someURLToRedirectTo = '&lt;要跳转到的网址&gt;'
+const code = &lt;跳转代码，可以是永久迁移(301)或者临时迁移(302)，建议301&gt;
+</code></pre></div>
+
+<p>然后点击<code>HTTP</code>栏中的<code>发送</code>，如果右边显示重定向信息，那么就可以了：</p>
+<p><img loading="lazy" alt="批注 2020-04-21 160454.jpg" src="/blog/img/e8dd26c0d7fe.jpg" /></p>
+<p>随后在<code>脚本</code>栏上方的域名中修改自定义子域名，比如<code>redirect.futrime.workers.dev</code>（不修改也行）。</p>
+<p>然后回到域名管理界面的<code>Workers</code>栏，点击<code>添加路由</code>，输入被跳转的网址并选择刚才的Worker:</p>
+<p><img loading="lazy" alt="批注 2020-04-21 160732.jpg" src="/blog/img/08394070727b.jpg" /></p>
+<p>这个过程可以重复多次，想要跳转多少就跳转多少。</p>
+<p>然后就可以尝试访问自己的网站了看效果了。</p>
+<p>参考链接：</p>
+<ol>
+<li>https://www.cloudflare.com</li>
+<li>
+<p>https://www.workers.dev</p>
+</li>
+</ol>
+    </div>
+    <nav class="pager"><a class="prev" href="/blog/2020-05-17-利用server酱实现minecraft服务器日志微信提醒/"><span class="mono">← Newer</span>利用Server酱实现Minecraft服务器日志微信提醒</a><a class="next" href="/blog/2020-05-10-开学了/"><span class="mono">Older →</span>开学了</a></nav>
+  </article>
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · <a href="/">zjzh.me</a> · <a href="/blog/atom.xml">Atom</a></span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--teal)"></i><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>
