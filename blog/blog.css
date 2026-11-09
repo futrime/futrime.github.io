@@ -1,6 +1,10 @@
 /* zjzh.me/blog — same tokens and pieces as the home page (index.html) */
 :root{
-  --teal:#3fbfb5; --teal-soft:#d2f1ee;
+  /* Hyacine's hair, sampled from her official splash art: pink roots -> mauve -> teal tips */
+  --hair-pink-lit:#f6c2c1; --hair-pink:#e1a2aa; --hair-mauve:#ce92b3;
+  --teal:#7bb6c5; --teal-lit:#91d1dc; --teal-glow:#9bf4f6; --teal-soft:#dcf1f4;
+  --hair:linear-gradient(180deg,#f6c2c1 0%,#e1a2aa 30%,#ce92b3 52%,#7bb6c5 72%,#91d1dc 88%,#9bf4f6 100%);
+  --hair-x:linear-gradient(90deg,#f6c2c1 0%,#e1a2aa 30%,#ce92b3 52%,#7bb6c5 72%,#91d1dc 88%,#9bf4f6 100%);
   --sky:#5fb4e0; --sky-soft:#cfe9f6;
   --pink:#ef8fb3; --pink-soft:#fbe0ea;
   --lilac:#a493de; --gold:#e6b85c;
@@ -11,12 +15,18 @@
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --teal:#6fd8cf; --teal-soft:#173b3a;
+    --teal:#91d1dc; --teal-soft:#1d3a40;
     --sky:#79c3ea; --sky-soft:#1c3346;
     --pink:#f39fbf; --pink-soft:#3a2333;
     --lilac:#b3a5ea; --gold:#ecc672;
     --ink:#eef1f8; --ink-2:#a5adc2; --rule:#eef1f8;
     --bg:#121726; --paper:#192036; --code:#0b0f1a; --code-ink:#eef1f8;
+  }
+}
+@supports (background:linear-gradient(in oklch,red,blue)){
+  :root{
+    --hair:linear-gradient(180deg in oklch,#f6c2c1 0%,#e1a2aa 30%,#ce92b3 52%,#7bb6c5 72%,#91d1dc 88%,#9bf4f6 100%);
+    --hair-x:linear-gradient(90deg in oklch,#f6c2c1 0%,#e1a2aa 30%,#ce92b3 52%,#7bb6c5 72%,#91d1dc 88%,#9bf4f6 100%);
   }
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -32,9 +42,9 @@ a{color:inherit;text-decoration:none}
 .bar nav a::after{content:"";position:absolute;left:0;right:100%;bottom:-3px;height:3px;background:var(--pink);transition:right .25s}
 .bar nav a:hover::after,.bar nav a[aria-current]::after{right:0}
 .logo{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.02em}
-.logo i{width:14px;height:14px;background:linear-gradient(135deg,var(--teal),var(--pink));display:inline-block;transform:rotate(45deg)}
+.logo i{width:14px;height:14px;background:var(--hair);display:inline-block;transform:rotate(45deg)}
 .kicker{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
-.kicker b{display:inline-block;width:42px;height:6px;background:var(--accent,var(--pink))}
+.kicker b{display:inline-block;width:72px;height:8px;background:var(--hair-x)}
 .kicker a{border-bottom:2px solid var(--teal)}
 .lede{max-width:680px;margin-top:20px;font-size:18px;color:var(--ink-2)}
 .chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;padding:3px 8px;border:1.5px solid var(--ink)}
