@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zijian Zhang · 张子健</title>
+<meta name="description" content="Zijian Zhang (张子健) — Ph.D. student at the College of AI, Tsinghua University, and research intern at NVIDIA. Agent flows, agentic coding and LLM reasoning.">
+<meta property="og:title" content="Zijian Zhang · 张子健">
+<meta property="og:description" content="Ph.D. student at Tsinghua University · Research intern at NVIDIA · Lead of Humanize">
+<meta property="og:url" content="https://zjzh.me/">
+<meta property="og:type" content="profile">
+<link rel="canonical" href="https://zjzh.me/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@500;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Hyacine palette: sky, blossom, lilac, sun-gold over cloud white */
+  --sky:#5fb4e0; --sky-soft:#cfe9f6;
+  --pink:#ef8fb3; --pink-soft:#fbe0ea;
+  --lilac:#a493de; --gold:#e6b85c;
+  --ink:#1d2742; --ink-2:#55607a; --rule:#1d2742;
+  --bg:#fbf8f4; --paper:#ffffff;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --sans:"Archivo","Helvetica Neue",Arial,"Noto Sans SC",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --sky:#79c3ea; --sky-soft:#1c3346;
+    --pink:#f39fbf; --pink-soft:#3a2333;
+    --lilac:#b3a5ea; --gold:#ecc672;
+    --ink:#eef1f8; --ink-2:#a5adc2; --rule:#eef1f8;
+    --bg:#121726; --paper:#192036;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 32px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+
+/* ---------- top bar ---------- */
+.bar{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-bottom:3px solid var(--rule)}
+.bar nav{display:flex;gap:22px;flex-wrap:wrap}
+.bar nav a{position:relative}
+.bar nav a::after{content:"";position:absolute;left:0;right:100%;bottom:-3px;height:3px;background:var(--pink);transition:right .25s}
+.bar nav a:hover::after{right:0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.02em}
+.logo i{width:14px;height:14px;background:var(--sky);display:inline-block;transform:rotate(45deg)}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;padding:56px 0 48px;position:relative;align-items:center}
+.kicker{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.kicker b{display:inline-block;width:42px;height:6px;background:var(--pink)}
+h1{font-weight:900;font-stretch:118%;font-size:clamp(56px,9.4vw,124px);line-height:.86;letter-spacing:-.035em;text-transform:uppercase}
+h1 .l2{display:block;padding-left:.42em;position:relative}
+h1 .l2::before{content:"";position:absolute;left:0;top:.18em;width:.28em;height:.62em;background:var(--sky)}
+.cn{font-family:"Noto Sans SC",sans-serif;font-weight:900;font-size:clamp(20px,2.4vw,28px);letter-spacing:.3em;margin:22px 0 0;display:flex;align-items:center;gap:14px}
+.cn::after{content:"";flex:0 0 80px;height:2px;background:var(--ink)}
+.lede{max-width:560px;margin-top:26px;font-size:18px;color:var(--ink-2)}
+.lede strong{color:var(--ink);font-weight:700}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.links a{border:2px solid var(--ink);padding:9px 14px 8px;display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:13px;letter-spacing:.04em;transition:transform .15s, box-shadow .15s;background:var(--paper)}
+.links a:hover{transform:translate(-3px,-3px);box-shadow:3px 3px 0 var(--pink)}
+.links a.primary{background:var(--ink);color:var(--bg)}
+.links a.primary:hover{box-shadow:3px 3px 0 var(--sky)}
+
+.comp{position:relative;width:100%;aspect-ratio:1/1;max-width:440px;justify-self:end}
+.comp svg{width:100%;height:100%;display:block;overflow:visible}
+
+/* ---------- sections ---------- */
+section.block{display:grid;grid-template-columns:240px 1fr;gap:32px;padding:44px 0;border-top:3px solid var(--rule)}
+.label{position:sticky;top:20px;align-self:start}
+.label .num{font-family:var(--mono);font-size:13px;display:inline-block;padding:3px 8px;color:var(--bg);background:var(--ink);margin-bottom:12px}
+.label h2{font-weight:900;font-stretch:112%;font-size:30px;line-height:1;text-transform:uppercase;letter-spacing:-.01em}
+.label .tick{display:block;width:56px;height:8px;margin-top:14px}
+
+.about p{font-size:18px;max-width:720px}
+.about p+p{margin-top:14px}
+.about .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.about .tags span{font-family:var(--mono);font-size:12px;padding:5px 10px;border:1.5px solid var(--ink)}
+.about .tags span:nth-child(4n+1){background:var(--sky-soft)}
+.about .tags span:nth-child(4n+2){background:var(--pink-soft)}
+
+ol.rows{list-style:none}
+ol.rows li{display:grid;grid-template-columns:118px 1fr;gap:20px;padding:14px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+ol.rows li:last-child{border-bottom:none}
+.when{font-family:var(--mono);font-size:13px;color:var(--ink-2);padding-top:3px}
+.what{font-size:16px}
+.what b{font-weight:800}
+.what .sub{color:var(--ink-2);font-size:15px}
+.what .place{font-family:var(--mono);font-size:12px;color:var(--ink-2);margin-left:6px;letter-spacing:.04em}
+.news .what a{border-bottom:2px solid var(--sky)}
+.news .what a:hover{background:var(--sky-soft)}
+
+/* publications */
+.pubs{list-style:none;counter-reset:p}
+.pubs li{position:relative;padding:18px 0 18px 64px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+.pubs li:last-child{border-bottom:none}
+.pubs li::before{counter-increment:p;content:counter(p,decimal-leading-zero);position:absolute;left:0;top:16px;font-weight:900;font-stretch:120%;font-size:30px;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--ink)}
+.pubs .t{font-weight:800;font-size:17px;line-height:1.35}
+.pubs .a{color:var(--ink-2);font-size:14.5px;margin-top:5px}
+.pubs .a u{color:var(--ink);font-weight:700;text-decoration:none;background:linear-gradient(transparent 62%,var(--pink-soft) 62%)}
+.pubs .v{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px;align-items:center}
+.chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;padding:3px 8px;border:1.5px solid var(--ink)}
+.chip.venue{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.link:hover{background:var(--gold);color:#1d2742;border-color:var(--gold)}
+
+/* projects */
+.proj{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:2px solid var(--ink)}
+.proj a{padding:22px 20px 20px;border-right:2px solid var(--ink);position:relative;background:var(--paper);transition:background .2s}
+.proj a:last-child{border-right:none}
+.proj a::before{content:"";position:absolute;left:0;top:0;height:8px;width:38%;background:var(--c)}
+.proj a:hover{background:color-mix(in srgb,var(--c) 14%,var(--paper))}
+.proj .role{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-top:8px}
+.proj h3{font-weight:900;font-stretch:112%;font-size:22px;margin-top:8px;text-transform:uppercase;letter-spacing:-.01em}
+.proj p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
+.proj .meta{font-family:var(--mono);font-size:12px;margin-top:14px}
+
+.honors li .what{font-size:15.5px}
+
+footer{border-top:3px solid var(--rule);padding:26px 0 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--ink-2)}
+footer .stripes{display:flex;height:8px;width:160px}
+footer .stripes i{flex:1}
+
+/* ---------- responsive ---------- */
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;padding-top:36px}
+  .comp{order:-1;justify-self:end;width:min(240px,60vw);margin:-12px -8px -40px 0}
+  .comp text{display:none}
+  section.block{grid-template-columns:1fr;gap:18px;padding:34px 0}
+  .label{position:static;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .label .num{margin:0}
+  .label .tick{margin:0}
+  .proj{grid-template-columns:1fr}
+  .proj a{border-right:none;border-bottom:2px solid var(--ink)}
+  .proj a:last-child{border-bottom:none}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .bar nav{display:none}
+  ol.rows li{grid-template-columns:1fr;gap:2px}
+  .pubs li{padding-left:46px}
+  .pubs li::before{font-size:24px}
+  .lede{font-size:16.5px}
+  .about p{font-size:16.5px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .comp .spin{transform-origin:300px 300px;animation:sway 9s ease-in-out infinite alternate}
+  @keyframes sway{from{transform:rotate(-10deg)}to{transform:rotate(10deg)}}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="bar">
+    <a class="logo" href="#top"><i></i>ZJZH.ME</a>
+    <nav class="mono">
+      <a href="#about">About</a>
+      <a href="#news">News</a>
+      <a href="#publications">Publications</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+    </nav>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <div class="hero" id="top">
+    <div>
+      <div class="kicker mono"><b></b>Ph.D. Student · Tsinghua University</div>
+      <h1>Zijian<span class="l2">Zhang</span></h1>
+      <div class="cn">张子健</div>
+      <p class="lede">I build <strong>flows around coding agents</strong>, so that the agents we already have can carry long, hard work to the finish. I lead <strong>Humanize</strong> and am a research intern at <strong>NVIDIA</strong>.</p>
+      <div class="links">
+        <a class="primary" href="mailto:andy.zijian.zhang@outlook.com">✉ Email</a>
+        <a href="https://scholar.google.com/citations?user=TyZxrvsAAAAJ" target="_blank" rel="noopener">Google Scholar ↗</a>
+        <a href="https://github.com/futrime" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://humanfia.ai" target="_blank" rel="noopener">Humanfia ↗</a>
+      </div>
+    </div>
+
+    <!-- Constructivist composition in the Hyacine palette -->
+    <div class="comp" aria-hidden="true">
+      <svg viewBox="0 0 600 600">
+        <g class="spin">
+          <!-- rainbow arc -->
+          <path d="M120 300 a180 180 0 0 1 360 0" fill="none" stroke="var(--pink)" stroke-width="16"/>
+          <path d="M146 300 a154 154 0 0 1 308 0" fill="none" stroke="var(--gold)" stroke-width="16"/>
+          <path d="M172 300 a128 128 0 0 1 256 0" fill="none" stroke="var(--sky)" stroke-width="16"/>
+          <path d="M198 300 a102 102 0 0 1 204 0" fill="none" stroke="var(--lilac)" stroke-width="16"/>
+        </g>
+        <circle cx="300" cy="300" r="80" fill="var(--sky)"/>
+        <rect x="40" y="372" width="520" height="54" fill="var(--ink)" transform="rotate(-28 300 399)"/>
+        <rect x="350" y="70" width="70" height="70" fill="var(--pink)" transform="rotate(14 385 105)"/>
+        <rect x="96" y="470" width="150" height="14" fill="var(--gold)"/>
+        <rect x="96" y="494" width="90" height="14" fill="var(--lilac)"/>
+        <circle cx="480" cy="480" r="22" fill="none" stroke="var(--ink)" stroke-width="5"/>
+        <line x1="60" y1="120" x2="250" y2="120" stroke="var(--ink)" stroke-width="4"/>
+        <text x="60" y="108" font-family="IBM Plex Mono, monospace" font-size="15" fill="var(--ink)" letter-spacing="3">№ 01 — FLOW</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section class="block about" id="about">
+    <div class="label"><span class="num">01</span><h2>About</h2><span class="tick" style="background:var(--sky)"></span></div>
+    <div>
+      <p>I am a Ph.D. student in Computer Science at the <b>College of AI, Tsinghua University</b>, and a research intern at <b>NVIDIA</b> in Singapore. Before that I received my B.Eng. in Automation from Tsinghua University.</p>
+      <p>My work centres on <b>agent flows</b>: the loops, reviewers and runtimes that organise coding agents for long-horizon tasks, from software engineering and machine-learning engineering to olympiad mathematics and formal proofs. I also work on LLM reasoning and efficient inference, and have long been building open-source developer tools.</p>
+      <div class="tags">
+        <span>Agent flows</span><span>Agentic coding</span><span>LLM reasoning</span><span>Efficient inference</span><span>Open source</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NEWS ===================== -->
+  <section class="block news" id="news">
+    <div class="label"><span class="num">02</span><h2>News</h2><span class="tick" style="background:var(--pink)"></span></div>
+    <ol class="rows">
+      <li><span class="when">2026.10</span><span class="what">Four papers on Humanize and its flows are out on arXiv: <a href="https://arxiv.org/abs/2610.08900" target="_blank" rel="noopener">agentic coding</a>, <a href="https://arxiv.org/abs/2610.13494" target="_blank" rel="noopener">MLE agents</a>, <a href="https://arxiv.org/abs/2610.13632" target="_blank" rel="noopener">olympiad agents</a> and a <a href="https://arxiv.org/abs/2610.13897" target="_blank" rel="noopener">Lean formalization of geometrization</a>.</span></li>
+      <li><span class="when">2026.10</span><span class="what">Wrote <a href="https://humanfia.ai/blog/2026-10-14-flow-science" target="_blank" rel="noopener">Flow Science: A New Dimension of Scaling Agents</a>.</span></li>
+      <li><span class="when">2026.08</span><span class="what"><a href="https://arxiv.org/abs/2608.24658" target="_blank" rel="noopener">Parason</a> is out on arXiv.</span></li>
+      <li><span class="when">2026.07</span><span class="what">Released <a href="https://github.com/humanfia/humanize" target="_blank" rel="noopener">Humanize</a>, an open-source agent flow system.</span></li>
+      <li><span class="when">2026.06</span><span class="what">Joined NVIDIA Singapore as a research intern.</span></li>
+    </ol>
+  </section>
+
+  <!-- ===================== PUBLICATIONS ===================== -->
+  <section class="block" id="publications">
+    <div class="label"><span class="num">03</span><h2>Publi&shy;cations</h2><span class="tick" style="background:var(--gold)"></span></div>
+    <ol class="pubs">
+      <li>
+        <div class="t">Humanize: Judgement Engineering for Agentic Coding</div>
+        <div class="a">Sihao Liu, Ligeng Zhu, <u>Zijian Zhang</u>, Dongyun Zou, Zhengyang Zhang, Changye Li, Song Bian, Song Han, Tony Nowatzki</div>
+        <div class="v"><span class="chip venue">arXiv 2026</span><a class="chip link" href="https://arxiv.org/abs/2610.08900" target="_blank" rel="noopener">Paper</a><a class="chip link" href="https://github.com/humanfia/humanize" target="_blank" rel="noopener">Code</a></div>
+      </li>
+      <li>
+        <div class="t">Humanize MLE Agents: Multi-Agent Session Alternation Beyond Single-Agent Limits</div>
+        <div class="a">Changye Li, <u>Zijian Zhang</u>, Muheng Li, Yiduo Pang, Tingjun Wu, Menghan Li, Yitong Liu, Hongkai Guo, Mengchi Chen, Chenyu He, Kaisheng Ma, Wei Xu, Song Han, Sihao Liu, Ligeng Zhu</div>
+        <div class="v"><span class="chip venue">arXiv 2026</span><a class="chip link" href="https://arxiv.org/abs/2610.13494" target="_blank" rel="noopener">Paper</a></div>
+      </li>
+      <li>
+        <div class="t">Humanize Olympiad Agents: A Multi-Session Workflow for Olympiad Problem Solving with Solve, Review, Wiki, Verify</div>
+        <div class="a">Zhengyang Zhang, Jing Xiong, Hongzhou Lin, Jui-Hui Chung, <u>Zijian Zhang</u>, Song Han, Sihao Liu, Ligeng Zhu</div>
+        <div class="v"><span class="chip venue">arXiv 2026</span><a class="chip link" href="https://arxiv.org/abs/2610.13632" target="_blank" rel="noopener">Paper</a></div>
+      </li>
+      <li>
+        <div class="t">A Lean Formalization of the Hamilton–Perelman Proof of Thurston's Geometrization Conjecture</div>
+        <div class="a">Yuan Liao, Ziyang Qin, Jui-Hui Chung, Ayush Khaitan, Zhengyang Zhang, Hongzhou Lin, <u>Zijian Zhang</u>, Ligeng Zhu, Peng Lu, Bennett Chow</div>
+        <div class="v"><span class="chip venue">arXiv 2026</span><a class="chip link" href="https://arxiv.org/abs/2610.13897" target="_blank" rel="noopener">Paper</a></div>
+      </li>
+      <li>
+        <div class="t">Parason: Revealing Subtask and Trial Parallelism in LLM Reasoning</div>
+        <div class="a">Zhengyang Zhang, <u>Zijian Zhang</u>, Jiaxuan Gao, Shusheng Xu, Yi Wu, Song Han, Ligeng Zhu</div>
+        <div class="v"><span class="chip venue">arXiv 2026</span><a class="chip link" href="https://arxiv.org/abs/2608.24658" target="_blank" rel="noopener">Paper</a></div>
+      </li>
+      <li>
+        <div class="t">Network-Centric Distributed Tracing with DeepFlow: Troubleshooting Your Microservices in Zero Code</div>
+        <div class="a">Junxian Shen, Han Zhang, Yang Xiang, Xingang Shi, Xinrui Li, Yunxi Shen, <u>Zijian Zhang</u>, Yongxiang Wu, Xia Yin, Jilong Wang, Mingwei Xu, Yahui Li, Jiping Yin, Jianchang Song, Zhuofeng Li, Runjie Nie</div>
+        <div class="v"><span class="chip venue">ACM SIGCOMM 2023</span><a class="chip link" href="https://dl.acm.org/doi/10.1145/3603269.3604823" target="_blank" rel="noopener">Paper</a></div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ===================== PROJECTS ===================== -->
+  <section class="block" id="projects">
+    <div class="label"><span class="num">04</span><h2>Projects</h2><span class="tick" style="background:var(--lilac)"></span></div>
+    <div class="proj">
+      <a href="https://github.com/humanfia/humanize" target="_blank" rel="noopener" style="--c:var(--sky)">
+        <div class="role">Project lead</div>
+        <h3>Humanize</h3>
+        <p>The agent flow system that runs Claude Code, Codex and other coding agents in loops until the task is done.</p>
+        <div class="meta">humanfia/humanize ↗</div>
+      </a>
+      <a href="https://github.com/sgl-project/sglang" target="_blank" rel="noopener" style="--c:var(--pink)">
+        <div class="role">Contributor</div>
+        <h3>SGLang</h3>
+        <p>Model support for VILA, NVILA, Jet-Nemotron and JetVLM in the SGLang serving engine.</p>
+        <div class="meta">sgl-project/sglang ↗</div>
+      </a>
+      <a href="https://github.com/LiteLDev" target="_blank" rel="noopener" style="--c:var(--gold)">
+        <div class="role">Core developer</div>
+        <h3>LeviMC</h3>
+        <p>LeviLamina, the mod loader for Minecraft Bedrock Edition, and lip, its package installer, which I founded.</p>
+        <div class="meta">LiteLDev ↗</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================== EXPERIENCE ===================== -->
+  <section class="block" id="experience">
+    <div class="label"><span class="num">05</span><h2>Experience</h2><span class="tick" style="background:var(--sky)"></span></div>
+    <ol class="rows">
+      <li><span class="when">2026.06 – now</span><span class="what"><b>NVIDIA</b> · Research Intern<span class="place">Singapore</span></span></li>
+      <li><span class="when">2025.02 – 06</span><span class="what"><b>NVIDIA</b> · Research Intern<span class="place">Beijing</span></span></li>
+      <li><span class="when">2024.08 – 25.01</span><span class="what"><b>Siemens</b> · Associate Engineer<span class="place">Beijing</span></span></li>
+      <li><span class="when">2024.06 – 10</span><span class="what"><b>USC Learning and Interactive Robot Autonomy Lab</b> · Research Intern<div class="sub">with Prof. Erdem Bıyık</div></span></li>
+      <li><span class="when">2023.06 – 24.06</span><span class="what"><b>Department of Electronic Engineering, Tsinghua University</b> · Research Assistant<div class="sub">with Prof. Jifeng Dai</div></span></li>
+      <li><span class="when">2022.10 – 23.09</span><span class="what"><b>Yunshan Networks</b> · Cloud Native Research Intern<span class="place">Beijing</span></span></li>
+      <li><span class="when">2022.03 – 23.06</span><span class="what"><b>Department of Computer Science and Technology, Tsinghua University</b> · Research Assistant<div class="sub">with Prof. Jianmin Li</div></span></li>
+    </ol>
+  </section>
+
+  <!-- ===================== EDUCATION ===================== -->
+  <section class="block" id="education">
+    <div class="label"><span class="num">06</span><h2>Education</h2><span class="tick" style="background:var(--pink)"></span></div>
+    <ol class="rows">
+      <li><span class="when">2025 – now</span><span class="what"><b>Tsinghua University</b> · Ph.D. in Computer Science<div class="sub">College of AI</div></span></li>
+      <li><span class="when">2021 – 2025</span><span class="what"><b>Tsinghua University</b> · B.Eng. in Automation<div class="sub">Department of Automation</div></span></li>
+    </ol>
+  </section>
+
+  <!-- ===================== TEACHING & HONORS ===================== -->
+  <section class="block honors" id="honors">
+    <div class="label"><span class="num">07</span><h2>Teaching &amp; Honors</h2><span class="tick" style="background:var(--gold)"></span></div>
+    <ol class="rows">
+      <li><span class="when">2025 – now</span><span class="what">Teaching Assistant, Institute for Interdisciplinary Information Sciences, Tsinghua University</span></li>
+      <li><span class="when">2023 – now</span><span class="what">Teaching Assistant, <i>Projects Design – Humanoid Soccer Robot</i>, Department of Mechanical Engineering, Tsinghua University</span></li>
+      <li><span class="when">2024</span><span class="what">Comprehensive Excellence Scholarship; Friends of Tsinghua – Ningbo Future Star Scholarship, Tsinghua University</span></li>
+      <li><span class="when">2022, 2023</span><span class="what">Scholarship for Excellence in Science, Technology and Innovation, Tsinghua University</span></li>
+      <li><span class="when">2023</span><span class="what">Second Prize, China Undergraduate Mathematical Contest in Modeling</span></li>
+      <li><span class="when">2023</span><span class="what">First Place, Tsinghua University Cyberdog Design Competition</span></li>
+    </ol>
+  </section>
+
+  <footer class="mono">
+    <span>© 2026 Zijian Zhang · zjzh.me</span>
+    <span class="stripes" aria-hidden="true"><i style="background:var(--pink)"></i><i style="background:var(--gold)"></i><i style="background:var(--sky)"></i><i style="background:var(--lilac)"></i></span>
+  </footer>
+</div>
+</body>
+</html>
